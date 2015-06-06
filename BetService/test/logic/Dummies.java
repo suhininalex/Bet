@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Dummies implements BusinessFactories{
     @Override
-    public Bet getBetInstance(){
+    public Bet getBetInstance(Object dataProvider){
         Bet bet = new Bet() {
 
             SelfUser selfUser;
@@ -40,7 +40,7 @@ public class Dummies implements BusinessFactories{
     }
     
     @Override
-    public SelfUser getSelfUserInstance(){
+    public SelfUser getSelfUserInstance(Object dataProvider){
         SelfUser selfUser = new SelfUser() {
             @Override
             public void save() {
@@ -61,7 +61,7 @@ public class Dummies implements BusinessFactories{
     }
     
     @Override
-    public CompanyUser getCompanyUserInstance(){
+    public CompanyUser getCompanyUserInstance(Object dataProvider){
         CompanyUser companyUser = new CompanyUser() {
             @Override
             public void save() {
@@ -82,7 +82,7 @@ public class Dummies implements BusinessFactories{
     
     public static List<Outcome> eventOutcomes;
     @Override
-    public Event getEventInstance(){
+    public Event getEventInstance(Object dataProvider){
         return new Event() {
 
             CompanyUser companyUser;
@@ -110,7 +110,7 @@ public class Dummies implements BusinessFactories{
     }
     
     @Override
-    public Payments getPaymentInstance(){
+    public Payments getPaymentInstance(Object dataProvider){
         return new Payments() {
 
             Event event;
@@ -144,7 +144,7 @@ public class Dummies implements BusinessFactories{
 
     public static List<Bet> outcomeBets;
     @Override
-    public Outcome getOutcomeInstance() {
+    public Outcome getOutcomeInstance(Object dataProvider) {
         return new Outcome() {
             List<Bet> bets = outcomeBets;
             Event event;

@@ -1,6 +1,5 @@
 package database;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,9 +7,9 @@ import java.sql.Statement;
 import java.util.List;
 import logic.Bet;
 import logic.SelfUser;
-import util.StorableInDB;
+import util.MySqlUtil;
 
-public class SelfUserDB extends SelfUser implements StorableInDB{
+public class SelfUserDB extends SelfUser{
     
     private final String preparedSave = "INSERT INTO SELFUSER (LOGNAME, PASSWORD, BALANCE, FULLNAME)" +
             "VALUES (?, ?, ?, ?)" +
@@ -18,7 +17,7 @@ public class SelfUserDB extends SelfUser implements StorableInDB{
     @Override
     public void save() {
         try {
-            PreparedStatement prepared = getConnectionToUse().prepareStatement(preparedSave, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedSave, Statement.RETURN_GENERATED_KEYS);
             prepared.setString(1, getLogname());
             prepared.setString(2, getPassword());
             prepared.setDouble(3, getBalance());
@@ -38,31 +37,29 @@ public class SelfUserDB extends SelfUser implements StorableInDB{
     
     public void load(ResultSet resultSet) {
         try {
-            this.setId(resultSet.getLong("ID_COMPANY"));
+            this.setId(resultSet.getLong("ID_USER"));
             this.setFullname(resultSet.getString("FULLNAME"));
             this.setLogname(resultSet.getString("LOGNAME"));
             this.setPassword(resultSet.getString("PASSWORD"));
             this.setBalance(resultSet.getDouble("BALANCE"));
         } catch (SQLException ex) {
-            throw new IllegalArgumentException("Can not load company entity!", ex);
+            throw new IllegalArgumentException("Can not load selfuser entity!", ex);
         }
     }
-    
-    Connection connection = null;
-    
-    @Override
-    public void setConnectionToUse(Connection connection) {
-        this.connection = connection;
-    }
 
-    @Override
-    public Connection getConnectionToUse() {
-        return connection;
-    }
-
+    private final String preparedLogin = "SELECT * FROM SELFUSER WHERE LOGNAME=? AND PASSWORD=?";
     @Override
     public void login(String logname, String password) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedLogin);
+            prepared.setString(1, logname);
+            prepared.setString(2, password);
+            ResultSet rs = prepared.executeQuery();
+            rs.next();
+            load(rs);
+        } catch (SQLException ex) {
+            throw new IllegalArgumentException("Can not login as "+logname+":"+password, ex);
+        }
     }
 
     @Override

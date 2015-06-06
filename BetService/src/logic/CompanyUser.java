@@ -18,7 +18,7 @@ public abstract class CompanyUser extends BasicUser{
     public abstract List<Event> getEvents();
     
     public void createEvent(String description, Date expires) {
-        Event event = EntityProvider.getBusinessFactories().getEventInstance();
+        Event event = EntityProvider.getBusinessFactories().getEventInstance(getDataProvider());
         event.setCompanyUser(this);
         event.setDescription(description);
         event.setExpirationTime(expires);

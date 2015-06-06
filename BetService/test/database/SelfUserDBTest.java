@@ -1,11 +1,13 @@
 package database;
 
-import java.sql.Connection;
+import logic.SelfUser;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import util.DBBusinessFactories;
+import util.EntityProvider;
 import util.MySqlUtil;
 
 public class SelfUserDBTest {
@@ -23,6 +25,7 @@ public class SelfUserDBTest {
     
     @Before
     public void setUp() {
+        EntityProvider.setBusinessFactoris(new DBBusinessFactories());
     }
     
     @After
@@ -34,8 +37,7 @@ public class SelfUserDBTest {
      */
     @Test
     public void testSave() {
-        SelfUserDB user = new SelfUserDB();
-        user.setConnectionToUse(MySqlUtil.getConnection());
+        SelfUser user = EntityProvider.getBusinessFactories().getSelfUserInstance(MySqlUtil.getConnection());
         user.setLogname("llama");
         user.setFullname("crazy llama");
         user.setPassword("11235813");

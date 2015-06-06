@@ -38,26 +38,26 @@ public class OutcomeTest {
     @Test
     public void testPayAllWin() {
         System.out.print("outcome payAll win\t");
-        CompanyUser companyUser = EntityProvider.getBusinessFactories().getCompanyUserInstance();
+        CompanyUser companyUser = EntityProvider.getBusinessFactories().getCompanyUserInstance(null);
         companyUser.balance = 500.0;
         List<Bet> bets = new LinkedList<>();
         
-        SelfUser selfUser1 = EntityProvider.getBusinessFactories().getSelfUserInstance();
-        Bet bet1 = EntityProvider.getBusinessFactories().getBetInstance();
+        SelfUser selfUser1 = EntityProvider.getBusinessFactories().getSelfUserInstance(null);
+        Bet bet1 = EntityProvider.getBusinessFactories().getBetInstance(null);
         bet1.setUser(selfUser1);
         bet1.setK(2);
         bet1.setAmount(50);
         
-        SelfUser selfUser2 = EntityProvider.getBusinessFactories().getSelfUserInstance();
+        SelfUser selfUser2 = EntityProvider.getBusinessFactories().getSelfUserInstance(null);
         bets.add(bet1);
-        Bet bet2 = EntityProvider.getBusinessFactories().getBetInstance();
+        Bet bet2 = EntityProvider.getBusinessFactories().getBetInstance(null);
         bet2.setUser(selfUser2);
         bet2.setAmount(70.0);
         bet2.setK(3);
         
         Dummies.outcomeBets = bets;
-        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance();
-        Event event = EntityProvider.getBusinessFactories().getEventInstance();
+        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance(null);
+        Event event = EntityProvider.getBusinessFactories().getEventInstance(null);
         event.setCompanyUser(companyUser);
         outcome.setEvent(event);
 
@@ -78,26 +78,26 @@ public class OutcomeTest {
     @Test
     public void testPayAllLoose() {
         System.out.print("outcome payAll loose \t");
-        CompanyUser companyUser = EntityProvider.getBusinessFactories().getCompanyUserInstance();
+        CompanyUser companyUser = EntityProvider.getBusinessFactories().getCompanyUserInstance(null);
         companyUser.balance = 500.0;
         List<Bet> bets = new LinkedList<>();
         
-        SelfUser selfUser1 = EntityProvider.getBusinessFactories().getSelfUserInstance();
-        Bet bet1 = EntityProvider.getBusinessFactories().getBetInstance();
+        SelfUser selfUser1 = EntityProvider.getBusinessFactories().getSelfUserInstance(null);
+        Bet bet1 = EntityProvider.getBusinessFactories().getBetInstance(null);
         bet1.setUser(selfUser1);
         bet1.setK(2);
         bet1.setAmount(50);
         
-        SelfUser selfUser2 = EntityProvider.getBusinessFactories().getSelfUserInstance();
+        SelfUser selfUser2 = EntityProvider.getBusinessFactories().getSelfUserInstance(null);
         bets.add(bet1);
-        Bet bet2 = EntityProvider.getBusinessFactories().getBetInstance();
+        Bet bet2 = EntityProvider.getBusinessFactories().getBetInstance(null);
         bet2.setUser(selfUser2);
         bet2.setAmount(70.0);
         bet2.setK(3);
         
         Dummies.outcomeBets = bets;
-        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance();
-        Event event = EntityProvider.getBusinessFactories().getEventInstance();
+        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance(null);
+        Event event = EntityProvider.getBusinessFactories().getEventInstance(null);
         event.setCompanyUser(companyUser);
         outcome.setEvent(event);
 
@@ -118,26 +118,26 @@ public class OutcomeTest {
     @Test
     public void testRiskAssesment() {
         System.out.print("risk assesment \t");
-        CompanyUser companyUser = EntityProvider.getBusinessFactories().getCompanyUserInstance();
+        CompanyUser companyUser = EntityProvider.getBusinessFactories().getCompanyUserInstance(null);
         companyUser.balance = 500.0;
         List<Bet> bets = new LinkedList<>();
         
-        SelfUser selfUser1 = EntityProvider.getBusinessFactories().getSelfUserInstance();
-        Bet bet1 = EntityProvider.getBusinessFactories().getBetInstance();
+        SelfUser selfUser1 = EntityProvider.getBusinessFactories().getSelfUserInstance(null);
+        Bet bet1 = EntityProvider.getBusinessFactories().getBetInstance(null);
         bet1.setUser(selfUser1);
         bet1.setK(2);
         bet1.setAmount(50);
         
-        SelfUser selfUser2 = EntityProvider.getBusinessFactories().getSelfUserInstance();
+        SelfUser selfUser2 = EntityProvider.getBusinessFactories().getSelfUserInstance(null);
         bets.add(bet1);
-        Bet bet2 = EntityProvider.getBusinessFactories().getBetInstance();
+        Bet bet2 = EntityProvider.getBusinessFactories().getBetInstance(null);
         bet2.setUser(selfUser2);
         bet2.setAmount(70.0);
         bet2.setK(3);
         
         Dummies.outcomeBets = bets;
-        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance();
-        Event event = EntityProvider.getBusinessFactories().getEventInstance();
+        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance(null);
+        Event event = EntityProvider.getBusinessFactories().getEventInstance(null);
         event.setCompanyUser(companyUser);
         outcome.setEvent(event);
 

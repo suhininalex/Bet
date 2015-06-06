@@ -38,7 +38,7 @@ public class BasicUserTest {
     public void testWithdraw() {
         System.out.print("withdraw \t");
         double amount = 50.0;
-        BasicUser instance = EntityProvider.getBusinessFactories().getSelfUserInstance();
+        BasicUser instance = EntityProvider.getBusinessFactories().getSelfUserInstance(null);
         instance.withdraw(amount);
         assertEquals(150.0, instance.getBalance(),0.01);
         System.out.println("OK");
@@ -51,7 +51,7 @@ public class BasicUserTest {
     public void testDeposit() {
         System.out.print("deposit \t");
         double amount = 15.0;
-        BasicUser instance = EntityProvider.getBusinessFactories().getSelfUserInstance();
+        BasicUser instance = EntityProvider.getBusinessFactories().getSelfUserInstance(null);
         instance.deposit(amount);
         assertEquals(215.0, instance.getBalance(),0.01);
         System.out.println("OK");
@@ -64,8 +64,8 @@ public class BasicUserTest {
     public void testCreateBet() {
         System.out.print("create bet \t");
         double amount = 15.0;
-        BasicUser instance = EntityProvider.getBusinessFactories().getSelfUserInstance();
-        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance();
+        BasicUser instance = EntityProvider.getBusinessFactories().getSelfUserInstance(null);
+        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance(null);
         outcome.setCurrentK(2);
         instance.deposit(amount);
         assertEquals(215.0, instance.getBalance(),0.01);

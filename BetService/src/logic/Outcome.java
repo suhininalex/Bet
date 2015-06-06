@@ -3,7 +3,7 @@ package logic;
 import util.Storable;
 import java.util.List;
 
-public abstract class Outcome implements Storable{
+public abstract class Outcome extends WithDataProvider implements Storable{
     double currentK;
     String name;
     Long id;

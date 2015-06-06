@@ -2,15 +2,15 @@ package logic;
 
 public interface BusinessFactories {
     
-    public Bet getBetInstance();
+    public Bet getBetInstance(Object dataProvider);
     
-    public Event getEventInstance();
+    public Event getEventInstance(Object dataProvider);
     
-    public Outcome getOutcomeInstance();
+    public Outcome getOutcomeInstance(Object dataProvider);
     
-    public Payments getPaymentInstance();
+    public Payments getPaymentInstance(Object dataProvider);
     
-    public SelfUser getSelfUserInstance();
+    public SelfUser getSelfUserInstance(Object dataProvider);
     
-    public CompanyUser getCompanyUserInstance();
+    public CompanyUser getCompanyUserInstance(Object dataProvider);
 }

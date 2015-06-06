@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import logic.WithDataProvider;
 
 public class MySqlUtil {
     private static final String url;
@@ -41,6 +42,10 @@ public class MySqlUtil {
         } catch (SQLException ex) {
             throw new RuntimeException("Can not connect to the database");
         }
+    }
+    
+    public static Connection extractConnection(WithDataProvider object){
+        return (Connection)object.getDataProvider();
     }
     
 }

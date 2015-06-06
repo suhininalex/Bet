@@ -2,7 +2,7 @@ package logic;
 
 import util.Storable;
 
-public abstract class BasicUser implements Storable{
+public abstract class BasicUser extends WithDataProvider implements Storable{
     String logname;
     String password;
     double balance=0;

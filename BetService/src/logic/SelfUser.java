@@ -15,12 +15,15 @@ public abstract class SelfUser extends BasicUser{
     }
     
     public void createBet(Outcome outcome, double amount){
-        Bet bet = EntityProvider.getBusinessFactories().getBetInstance();
+        Bet bet = EntityProvider.getBusinessFactories().getBetInstance(getDataProvider());
         this.withdraw(amount);
+        if (System.currentTimeMillis()>outcome.getEvent().getExpirationTime().getTime())
+            throw new IllegalStateException("Event id expired already");
         bet.setUser(this);
         bet.setOutcome(outcome);
         bet.amount = amount;
         bet.K = outcome.getCurrentK();
+        bet.setStatus(Bet.Status.Open);
         bet.save();
     }
       

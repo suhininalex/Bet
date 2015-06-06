@@ -1,25 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import logic.CompanyUser;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import util.DBBusinessFactories;
+import util.EntityProvider;
 import util.MySqlUtil;
 
-/**
- *
- * @author llama
- */
 public class CompanyUserDbTest {
     
     public CompanyUserDbTest() {
@@ -35,6 +29,7 @@ public class CompanyUserDbTest {
     
     @Before
     public void setUp() {
+        EntityProvider.setBusinessFactoris(new DBBusinessFactories());
     }
     
     @After
@@ -47,8 +42,7 @@ public class CompanyUserDbTest {
     @Test
     public void testSaveAndLoad() throws SQLException {
         System.out.println("Trying to save...");
-        CompanyUserDB user = new CompanyUserDB();
-        user.setConnectionToUse(MySqlUtil.getConnection());
+        CompanyUser user = EntityProvider.getBusinessFactories().getCompanyUserInstance(MySqlUtil.getConnection());
         user.setLogname("llama");
         user.setCompanyName("Llamas corporation");
         user.setPassword("11235815");
@@ -67,8 +61,7 @@ public class CompanyUserDbTest {
     @Test
     public void testLogin(){
         System.out.println("Trying to login...");
-        CompanyUserDB user = new CompanyUserDB();
-        user.setConnectionToUse(MySqlUtil.getConnection());
+        CompanyUser user = EntityProvider.getBusinessFactories().getCompanyUserInstance(MySqlUtil.getConnection());
         user.login("llama", "11235815");
         System.out.println(user.getCompanyName());
     }

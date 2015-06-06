@@ -5,7 +5,7 @@ import util.Storable;
 import java.util.List;
 import util.EntityProvider;
 
-public abstract class Event implements Storable{
+public abstract class Event extends WithDataProvider implements Storable{
     
     String description;
     Date expirationTime;
@@ -51,7 +51,7 @@ public abstract class Event implements Storable{
     public abstract List<Outcome> getOutcomes();
     
     public void addOutcome(String name, double k){
-        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance();
+        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance(getDataProvider());
         outcome.setCurrentK(k);
         outcome.setName(name);
         outcome.setEvent(this);
@@ -61,7 +61,7 @@ public abstract class Event implements Storable{
     public void setWinner(Outcome winner){
         setStatus(Status.Processing);
         save();
-        Payments payment = EntityProvider.getBusinessFactories().getPaymentInstance();
+        Payments payment = EntityProvider.getBusinessFactories().getPaymentInstance(getDataProvider());
         payment.setEvent(this);
         payment.setStatus(Payments.Status.Waiting);
         payment.setWinnerOutcome(winner);
