@@ -1,16 +1,25 @@
 package logic;
 
+import java.util.Date;
 import util.Storable;
-import java.sql.Time;
 import java.util.List;
 import util.Factories;
 
 public abstract class Event implements Storable{
     
     String description;
-    Time expirationTime;
-    Status status;
+    Date expirationTime;
+    Status status = Status.Open;
+    Long id;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public Status getStatus() {
         return status;
     }
@@ -27,11 +36,11 @@ public abstract class Event implements Storable{
         this.description = description;
     }
 
-    public Time getExpirationTime() {
+    public Date getExpirationTime() {
         return expirationTime;
     }
 
-    public void setExpirationTime(Time expirationTime) {
+    public void setExpirationTime(Date expirationTime) {
         this.expirationTime = expirationTime;
     }
     
@@ -40,16 +49,12 @@ public abstract class Event implements Storable{
     
     public abstract List<Outcome> getOutcomes();
     
-    public void assignEvent(CompanyUser companyUser, String description, Time expires, double[] outcomesK){
+    public void assignEvent(CompanyUser companyUser, String description, Date expires){
         setCompanyUser(companyUser);
         setDescription(description);
         setExpirationTime(expires);
         setStatus(Status.Open);
         save();
-        for (double k : outcomesK){
-            Outcome outcome = Factories.getOutcomeFactory().getObject();
-            outcome.assignOutcome(this, k);
-        }
     }
     
     public void setWinner(Outcome winner){
@@ -59,7 +64,28 @@ public abstract class Event implements Storable{
     }
     
     public static enum Status {
-        Open, Closed, Processing
+        Open (0), 
+        Closed (1), 
+        Processing(2);
+        
+        private final int code;
+
+        Status(int code) {
+            this.code = code;
+        }
+        
+        public static Status getFromCode(int code){
+            switch (code) {
+                case 0: return Open;
+                case 1: return Closed;
+                case 2: return Processing;
+                default: throw new IllegalArgumentException("Accepted codes are 0-2");
+            }
+        }
+
+        public int getCode() {
+            return code;
+        }
     }
     
 }

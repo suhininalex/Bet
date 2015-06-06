@@ -43,6 +43,10 @@ public class Dummies {
             public void save() {
 
             }
+
+            @Override
+            public void login(String logname, String password) {
+            }
         };
         selfUser.balance = 200.0;
         return selfUser;
@@ -87,6 +91,10 @@ public class Dummies {
         CompanyUser companyUser = new CompanyUser() {
             @Override
             public void save() {
+            }
+
+            @Override
+            public void login(String logname, String password) {
             }
         };
         companyUser.balance = 200.0;
