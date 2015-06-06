@@ -2,8 +2,9 @@ package logic;
 
 import java.util.List;
 
-public class Dummies {
-    public static Bet getBetDummy(){
+public class Dummies implements BusinessFactories{
+    @Override
+    public Bet getBetInstance(){
         Bet bet = new Bet() {
 
             SelfUser selfUser;
@@ -34,10 +35,12 @@ public class Dummies {
             }
         };
         bet.setAmount(50.0);
+        bet.K=2;
         return bet;
     }
     
-    public static SelfUser getSelfUserDummy(){
+    @Override
+    public SelfUser getSelfUserInstance(){
         SelfUser selfUser = new SelfUser() {
             @Override
             public void save() {
@@ -47,47 +50,18 @@ public class Dummies {
             @Override
             public void login(String logname, String password) {
             }
+
+            @Override
+            public List<Bet> getBets() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         };
         selfUser.balance = 200.0;
         return selfUser;
     }
     
-    public static Outcome getOutcomeDummy(final List<Bet> allbets, final long dummyId){
-        Outcome outcome = new Outcome() {
-            public final long id = dummyId;
-            public final List<Bet> bets= allbets;
-            Event event;
-            
-            @Override
-            public List<Bet> getAllBets() {
-                return bets;
-            }
-
-            @Override
-            public Event getEvent() {
-                return event;
-            }
-
-            @Override
-            public void setEvent(Event event) {
-                this.event = event;
-            }
-
-            @Override
-            public boolean equals(Outcome outcome) {
-                if (this.getClass().isInstance(outcome)) return this.id==this.getClass().cast(outcome).id;
-                else return false;
-            }
-
-            @Override
-            public void save() {
-            }
-        };
-        outcome.setCurrentK(2);
-        return outcome;
-    }
-    
-    public static CompanyUser getCompanyUserDummy(){
+    @Override
+    public CompanyUser getCompanyUserInstance(){
         CompanyUser companyUser = new CompanyUser() {
             @Override
             public void save() {
@@ -96,16 +70,23 @@ public class Dummies {
             @Override
             public void login(String logname, String password) {
             }
+
+            @Override
+            public List<Event> getEvents() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         };
         companyUser.balance = 200.0;
         return companyUser;
     }
     
-    public static Event getEventDummy(final List<Outcome> outcomes){
+    public static List<Outcome> eventOutcomes;
+    @Override
+    public Event getEventInstance(){
         return new Event() {
 
             CompanyUser companyUser;
-            List<Outcome> alloutcomes = outcomes;
+            List<Outcome> outcomes = eventOutcomes;
             
             @Override
             public CompanyUser getCompanyUser() {
@@ -119,7 +100,7 @@ public class Dummies {
 
             @Override
             public List<Outcome> getOutcomes() {
-                return alloutcomes;
+                return outcomes;
             }
 
             @Override
@@ -128,7 +109,8 @@ public class Dummies {
         };
     }
     
-    public static Payments getPaymentDummy(){
+    @Override
+    public Payments getPaymentInstance(){
         return new Payments() {
 
             Event event;
@@ -152,6 +134,34 @@ public class Dummies {
             @Override
             protected Outcome getWinnerOutcome() {
                 return winner;
+            }
+
+            @Override
+            public void save() {
+            }
+        };
+    }
+
+    public static List<Bet> outcomeBets;
+    @Override
+    public Outcome getOutcomeInstance() {
+        return new Outcome() {
+            List<Bet> bets = outcomeBets;
+            Event event;
+            
+            @Override
+            public List<Bet> getAllBets() {
+                return bets;
+            }
+
+            @Override
+            public Event getEvent() {
+                return event;
+            }
+
+            @Override
+            public void setEvent(Event event) {
+                this.event = event;
             }
 
             @Override

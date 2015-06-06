@@ -57,16 +57,7 @@ public abstract class Bet implements Storable{
         this.save();
         return amount;
     }
-    
-    public void assignBet(SelfUser selfUser, Outcome outcome, double amount){
-        selfUser.withdraw(amount);
-        this.setUser(selfUser);
-        this.setOutcome(outcome);
-        this.amount = amount;
-        this.K = outcome.getCurrentK();
-        this.save();
-    }
-        
+           
     public static enum Status {
         Open, Paid
     }

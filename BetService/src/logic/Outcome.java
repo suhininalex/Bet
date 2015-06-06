@@ -5,18 +5,18 @@ import java.util.List;
 
 public abstract class Outcome implements Storable{
     double currentK;
-    String description;
-    long id;
+    String name;
+    Long id;
 
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setName(String description) {
+        this.name = description;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -59,13 +59,10 @@ public abstract class Outcome implements Storable{
         }
         return total;
     }
-    
-    public void assignOutcome(Event event, double currenK){
-        setEvent(event);
-        setCurrentK(currentK);
-        save();
-    }
-    
-    public abstract boolean equals(Outcome outcome);
+        
+    public boolean equals(Outcome outcome){
+        System.out.println(outcome.getId());
+        return this.getId()==outcome.getId();
+    };
     
 }

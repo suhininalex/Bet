@@ -1,5 +1,9 @@
 package database;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 import java.util.List;
 import logic.Outcome;
@@ -52,15 +56,25 @@ public class EventDBTest {
      * Test of save method, of class EventDB.
      */
     @Test
-    public void testSaveAndLoad() {
-        System.out.println("Trying to save...");
+    public void testSaveAndLoad() throws SQLException {
+        System.out.println("Trying to save event...");
         CompanyUserDB companyUserDB = new CompanyUserDB();
         companyUserDB.setConnectionToUse(MySqlUtil.getConnection());
         companyUserDB.login("llama", "11235815");
+        String description = "Best event! Hurry to choose your winner!";
         EventDB instance = new EventDB();
         instance.setConnectionToUse(MySqlUtil.getConnection());
-        instance.assignEvent(companyUserDB, "Best event! Hurry to choose your winner!", new Date(System.currentTimeMillis()));
+        instance.assignEvent(companyUserDB, description, new Date(System.currentTimeMillis()));
         instance.save();
+        
+        EventDB event = new EventDB();
+        Connection connection = MySqlUtil.getConnection();
+        String query = "SELECT * FROM EVENT WHERE DESCRIPTION='"+description+"'";
+        Statement s = connection.createStatement();
+        ResultSet rs = s.executeQuery(query);
+        rs.next();
+        event.load(rs);
+        System.out.println(event.getId() + "\t" + event.getDescription());
     }
     
     

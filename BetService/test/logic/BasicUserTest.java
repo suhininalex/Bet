@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import util.EntityProvider;
 
 public class BasicUserTest {
     
@@ -14,6 +15,7 @@ public class BasicUserTest {
     
     @BeforeClass
     public static void setUpClass() {
+        
     }
     
     @AfterClass
@@ -22,6 +24,7 @@ public class BasicUserTest {
     
     @Before
     public void setUp() {
+        ConfigTest.config();
     }
     
     @After
@@ -35,7 +38,7 @@ public class BasicUserTest {
     public void testWithdraw() {
         System.out.print("withdraw \t");
         double amount = 50.0;
-        BasicUser instance = Dummies.getSelfUserDummy();
+        BasicUser instance = EntityProvider.getBusinessFactories().getSelfUserInstance();
         instance.withdraw(amount);
         assertEquals(150.0, instance.getBalance(),0.01);
         System.out.println("OK");
@@ -48,7 +51,22 @@ public class BasicUserTest {
     public void testDeposit() {
         System.out.print("deposit \t");
         double amount = 15.0;
-        BasicUser instance = Dummies.getSelfUserDummy();
+        BasicUser instance = EntityProvider.getBusinessFactories().getSelfUserInstance();
+        instance.deposit(amount);
+        assertEquals(215.0, instance.getBalance(),0.01);
+        System.out.println("OK");
+    }
+    
+    /**
+     * CreateBet
+     */
+    @Test
+    public void testCreateBet() {
+        System.out.print("create bet \t");
+        double amount = 15.0;
+        BasicUser instance = EntityProvider.getBusinessFactories().getSelfUserInstance();
+        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance();
+        outcome.setCurrentK(2);
         instance.deposit(amount);
         assertEquals(215.0, instance.getBalance(),0.01);
         System.out.println("OK");

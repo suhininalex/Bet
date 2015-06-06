@@ -15,11 +15,12 @@ public abstract class Payments implements Storable{
     }
     
     protected abstract void setEvent(Event event);
+    
     public abstract Event getEvent();
     
     protected abstract void setWinnerOutcome(Outcome outcome);
-    protected abstract Outcome getWinnerOutcome();
     
+    protected abstract Outcome getWinnerOutcome();
     
     public void payAll(){
         Outcome winner = getWinnerOutcome();
@@ -33,14 +34,7 @@ public abstract class Payments implements Storable{
         status = Status.Paid;
         save();
     }
-    
-    public void assignPayment(Event event, Outcome winner){
-        setEvent(event);
-        setWinnerOutcome(winner);
-        setStatus(Status.Waiting);
-        save();
-    }
-    
+       
     public static enum Status {
         Waiting, Paid
     }

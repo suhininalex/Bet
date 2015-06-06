@@ -5,6 +5,7 @@
  */
 package database;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.junit.After;
@@ -56,7 +57,9 @@ public class CompanyUserDbTest {
         System.out.println("Trying to load...");
         Statement s = MySqlUtil.getConnection().createStatement();
         CompanyUserDB userLoaded = new CompanyUserDB();
-        userLoaded.load(s.executeQuery("SELECT * FROM COMPANYUSER WHERE ID_COMPANY=1"));
+        ResultSet rs = s.executeQuery("SELECT * FROM COMPANYUSER WHERE ID_COMPANY=1");
+        rs.next();
+        userLoaded.load(rs);
         System.out.println("Company name:" + userLoaded.getCompanyName());
         assertTrue(userLoaded.getCompanyName().equals(userLoaded.getCompanyName()));
     }

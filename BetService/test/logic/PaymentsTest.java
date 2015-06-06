@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import util.EntityProvider;
 
 public class PaymentsTest {
     
@@ -24,6 +25,7 @@ public class PaymentsTest {
     
     @Before
     public void setUp() {
+        ConfigTest.config();
     }
     
     @After
@@ -39,45 +41,62 @@ public class PaymentsTest {
         System.out.println("payAll");
         
         List<Outcome> outcomes = new LinkedList<>();
+        Dummies.eventOutcomes = outcomes;
         
-        Event event = Dummies.getEventDummy(outcomes);
-        CompanyUser companyUser = Dummies.getCompanyUserDummy();
+        Event event = EntityProvider.getBusinessFactories().getEventInstance();
+        CompanyUser companyUser = EntityProvider.getBusinessFactories().getCompanyUserInstance();
         companyUser.balance = 500.0;
         event.setCompanyUser(companyUser);
         List<Bet> bets1 = new LinkedList<>();
         
-        Outcome outcome1 = Dummies.getOutcomeDummy(bets1, 0);
+        Dummies.outcomeBets = bets1;
+        Outcome outcome1 = EntityProvider.getBusinessFactories().getOutcomeInstance();
         outcome1.setEvent(event);
-        SelfUser selfUser1 = Dummies.getSelfUserDummy();
-        SelfUser selfUser2 = Dummies.getSelfUserDummy();
+        SelfUser selfUser1 = EntityProvider.getBusinessFactories().getSelfUserInstance();
+        SelfUser selfUser2 = EntityProvider.getBusinessFactories().getSelfUserInstance();
 
-        Bet bet1 = Dummies.getBetDummy();
-        bet1.assignBet(selfUser1, outcome1, 50.0);
+        Bet bet1 = EntityProvider.getBusinessFactories().getBetInstance();
+        bet1.setK(2);
+        bet1.setUser(selfUser1);
+        bet1.setOutcome(outcome1);
+        bet1.setAmount(50.0);
         bets1.add(bet1);
-        Bet bet2 = Dummies.getBetDummy();
-        bet2.assignBet(selfUser2, outcome1, 70.0);
+
+        Bet bet2 = EntityProvider.getBusinessFactories().getBetInstance();
+        bet2.setUser(selfUser2);
+        bet2.setOutcome(outcome1);
+        bet2.setAmount(70.0);
+        bet2.setK(2);
         bets1.add(bet2);
         
         outcomes.add(outcome1);
         
         List<Bet> bets2 = new LinkedList<>();
+        Dummies.outcomeBets = bets2;
         
-        Outcome outcome2 = Dummies.getOutcomeDummy(bets2, 1);
+        Outcome outcome2 = EntityProvider.getBusinessFactories().getOutcomeInstance();
         outcome2.setEvent(event);
-        SelfUser selfUser3 = Dummies.getSelfUserDummy();
-        SelfUser selfUser4 = Dummies.getSelfUserDummy();
+        SelfUser selfUser3 = EntityProvider.getBusinessFactories().getSelfUserInstance();
+        SelfUser selfUser4 = EntityProvider.getBusinessFactories().getSelfUserInstance();
 
-        Bet bet3 = Dummies.getBetDummy();
-        bet3.assignBet(selfUser3, outcome2, 25.0);
+        Bet bet3 = EntityProvider.getBusinessFactories().getBetInstance();
+        bet3.setUser(selfUser3);
+        bet3.setOutcome(outcome2);
+        bet3.setAmount(25.0);
+        bet3.setK(3);
         bets2.add(bet3);
-        Bet bet4 = Dummies.getBetDummy();
-        bet4.assignBet(selfUser4, outcome2, 30.0);
-        bets2.add(bet4);
         
+        Bet bet4 = EntityProvider.getBusinessFactories().getBetInstance();
+        bet4.setUser(selfUser4);
+        bet4.setOutcome(outcome2);
+        bet4.setAmount(30.0);
+        bet4.setK(3);
+        bets2.add(bet4);
         outcomes.add(outcome2);
         
-        Payments payment = Dummies.getPaymentDummy();
-        payment.assignPayment(event, outcome1);
+        Payments payment = EntityProvider.getBusinessFactories().getPaymentInstance();
+        payment.setEvent(event);
+        payment.setWinnerOutcome(outcome1);
         
         payment.payAll();
         

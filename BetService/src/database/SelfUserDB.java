@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import logic.Bet;
 import logic.SelfUser;
 import util.StorableInDB;
 
@@ -36,7 +38,6 @@ public class SelfUserDB extends SelfUser implements StorableInDB{
     
     public void load(ResultSet resultSet) {
         try {
-            resultSet.next();
             this.setId(resultSet.getLong("ID_COMPANY"));
             this.setFullname(resultSet.getString("FULLNAME"));
             this.setLogname(resultSet.getString("LOGNAME"));
@@ -61,6 +62,11 @@ public class SelfUserDB extends SelfUser implements StorableInDB{
 
     @Override
     public void login(String logname, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Bet> getBets() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
    

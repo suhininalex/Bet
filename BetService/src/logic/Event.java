@@ -3,15 +3,15 @@ package logic;
 import java.util.Date;
 import util.Storable;
 import java.util.List;
-import util.Factories;
+import util.EntityProvider;
 
 public abstract class Event implements Storable{
     
     String description;
     Date expirationTime;
     Status status = Status.Open;
-    Long id;
-
+    Long id = null;
+    
     public Long getId() {
         return id;
     }
@@ -19,7 +19,7 @@ public abstract class Event implements Storable{
     public void setId(Long id) {
         this.id = id;
     }
-    
+      
     public Status getStatus() {
         return status;
     }
@@ -45,22 +45,27 @@ public abstract class Event implements Storable{
     }
     
     public abstract CompanyUser getCompanyUser();
+    
     protected abstract void setCompanyUser(CompanyUser companyUser);
     
     public abstract List<Outcome> getOutcomes();
     
-    public void assignEvent(CompanyUser companyUser, String description, Date expires){
-        setCompanyUser(companyUser);
-        setDescription(description);
-        setExpirationTime(expires);
-        setStatus(Status.Open);
-        save();
+    public void addOutcome(String name, double k){
+        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance();
+        outcome.setCurrentK(k);
+        outcome.setName(name);
+        outcome.setEvent(this);
+        outcome.save();
     }
-    
+       
     public void setWinner(Outcome winner){
         setStatus(Status.Processing);
-        Payments payment = Factories.getPaymentsFactory().getObject();
-        payment.assignPayment(this, winner);
+        save();
+        Payments payment = EntityProvider.getBusinessFactories().getPaymentInstance();
+        payment.setEvent(this);
+        payment.setStatus(Payments.Status.Waiting);
+        payment.setWinnerOutcome(winner);
+        payment.save();
     }
     
     public static enum Status {
