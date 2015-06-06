@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Event.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BetService&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">logic</a> &gt; <span class="el_source">Event.java</span></div><h1>Event.java</h1><pre class="source lang-java linenums">package logic;
+
+import java.util.Date;
+import util.Storable;
+import java.util.List;
+import util.EntityProvider;
+
+<span class="fc" id="L8">public abstract class Event extends WithDataProvider implements Storable{</span>
+    
+    String description;
+    Date expirationTime;
+<span class="fc" id="L12">    Status status = Status.Open;</span>
+<span class="fc" id="L13">    Long id = null;</span>
+    
+    public Long getId() {
+<span class="fc" id="L16">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L20">        this.id = id;</span>
+<span class="fc" id="L21">    }</span>
+      
+    public Status getStatus() {
+<span class="fc" id="L24">        return status;</span>
+    }
+
+    protected void setStatus(Status status) {
+<span class="fc" id="L28">        this.status = status;</span>
+<span class="fc" id="L29">    }</span>
+       
+    public String getDescription() {
+<span class="fc" id="L32">        return description;</span>
+    }
+
+    public void setDescription(String description) {
+<span class="fc" id="L36">        this.description = description;</span>
+<span class="fc" id="L37">    }</span>
+
+    public Date getExpirationTime() {
+<span class="fc" id="L40">        return expirationTime;</span>
+    }
+
+    public void setExpirationTime(Date expirationTime) {
+<span class="fc" id="L44">        this.expirationTime = expirationTime;</span>
+<span class="fc" id="L45">    }</span>
+    
+    public abstract CompanyUser getCompanyUser();
+    
+    protected abstract void setCompanyUser(CompanyUser companyUser);
+    
+    public abstract List&lt;Outcome&gt; getOutcomes();
+    
+    public void addOutcome(String name, double k){
+<span class="fc" id="L54">        Outcome outcome = EntityProvider.getBusinessFactories().getOutcomeInstance(getDataProvider());</span>
+<span class="fc" id="L55">        outcome.setCurrentK(k);</span>
+<span class="fc" id="L56">        outcome.setName(name);</span>
+<span class="fc" id="L57">        outcome.setEvent(this);</span>
+<span class="fc" id="L58">        outcome.save();</span>
+<span class="fc" id="L59">    }</span>
+       
+    public void setWinner(Outcome winner){
+<span class="fc" id="L62">        setStatus(Status.Processing);</span>
+<span class="fc" id="L63">        save();</span>
+<span class="fc" id="L64">        Payments payment = EntityProvider.getBusinessFactories().getPaymentInstance(getDataProvider());</span>
+<span class="fc" id="L65">        payment.setEvent(this);</span>
+<span class="fc" id="L66">        payment.setStatus(Payments.Status.Waiting);</span>
+<span class="fc" id="L67">        payment.setWinnerOutcome(winner);</span>
+<span class="fc" id="L68">        payment.save();</span>
+<span class="fc" id="L69">    }</span>
+    
+<span class="pc" id="L71">    public static enum Status {</span>
+<span class="fc" id="L72">        Open (0), </span>
+<span class="fc" id="L73">        Closed (1), </span>
+<span class="fc" id="L74">        Processing(2);</span>
+        
+        private final int code;
+
+<span class="fc" id="L78">        Status(int code) {</span>
+<span class="fc" id="L79">            this.code = code;</span>
+<span class="fc" id="L80">        }</span>
+        
+        public static Status getFromCode(int code){
+<span class="pc bpc" id="L83" title="2 of 4 branches missed.">            switch (code) {</span>
+<span class="fc" id="L84">                case 0: return Open;</span>
+<span class="nc" id="L85">                case 1: return Closed;</span>
+<span class="fc" id="L86">                case 2: return Processing;</span>
+<span class="nc" id="L87">                default: throw new IllegalArgumentException(&quot;Accepted codes are 0-2&quot;);</span>
+            }
+        }
+
+        public int getCode() {
+<span class="fc" id="L92">            return code;</span>
+        }
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

@@ -41,6 +41,7 @@ public class SelfUserDBTest {
         user.setLogname("llama");
         user.setFullname("crazy llama");
         user.setPassword("11235813");
+        user.setBalance(1000);
         user.save();
         System.out.println(user.getId());
     }

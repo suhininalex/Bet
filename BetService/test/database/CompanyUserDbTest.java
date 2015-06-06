@@ -46,6 +46,7 @@ public class CompanyUserDbTest {
         user.setLogname("llama");
         user.setCompanyName("Llamas corporation");
         user.setPassword("11235815");
+        user.setBalance(1000);
         user.save();
         
         System.out.println("Trying to load...");

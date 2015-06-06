@@ -38,7 +38,7 @@ public class PaymentsTest {
      */
     @Test
     public void testPayAll() {
-        System.out.println("payAll");
+        System.out.print("payAll \t");
         
         List<Outcome> outcomes = new LinkedList<>();
         Dummies.eventOutcomes = outcomes;
@@ -99,8 +99,9 @@ public class PaymentsTest {
         payment.setWinnerOutcome(outcome1);
         
         payment.payAll();
+        assertEquals(260.0, companyUser.getBalance(), 0.1);
         
-        assertEquals(315.0, companyUser.getBalance(), 0.1);
+        System.out.println("OK");
     }
     
 }

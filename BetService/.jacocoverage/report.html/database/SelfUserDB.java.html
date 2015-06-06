@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SelfUserDB.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BetService&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">database</a> &gt; <span class="el_source">SelfUserDB.java</span></div><h1>SelfUserDB.java</h1><pre class="source lang-java linenums">package database;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+import logic.Bet;
+import logic.SelfUser;
+import util.MySqlUtil;
+
+<span class="fc" id="L12">public class SelfUserDB extends SelfUser{</span>
+    
+<span class="fc" id="L14">    private final String preparedSave = &quot;INSERT INTO SELFUSER (LOGNAME, PASSWORD, BALANCE, FULLNAME)&quot; +</span>
+            &quot;VALUES (?, ?, ?, ?)&quot; +
+            &quot;ON DUPLICATE KEY UPDATE LOGNAME=?, PASSWORD=?, BALANCE=?, FULLNAME=?&quot;;
+    @Override
+    public void save() {
+        try {
+<span class="fc" id="L20">            PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedSave, Statement.RETURN_GENERATED_KEYS);</span>
+<span class="fc" id="L21">            prepared.setString(1, getLogname());</span>
+<span class="fc" id="L22">            prepared.setString(2, getPassword());</span>
+<span class="fc" id="L23">            prepared.setDouble(3, getBalance());</span>
+<span class="fc" id="L24">            prepared.setString(4, getFullname());</span>
+<span class="fc" id="L25">            prepared.setString(5, getLogname());</span>
+<span class="fc" id="L26">            prepared.setString(6, getPassword());</span>
+<span class="fc" id="L27">            prepared.setDouble(7, getBalance());</span>
+<span class="fc" id="L28">            prepared.setString(8, getFullname());</span>
+<span class="fc" id="L29">            prepared.execute();</span>
+<span class="fc" id="L30">            ResultSet rs = prepared.getGeneratedKeys();</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">            if (rs.next())</span>
+<span class="fc" id="L32">                setId(rs.getLong(1));</span>
+<span class="nc" id="L33">        } catch (SQLException ex) {</span>
+<span class="nc" id="L34">            throw new IllegalStateException(&quot;Can not save SelfUser entity!&quot;, ex);</span>
+<span class="fc" id="L35">        }</span>
+<span class="fc" id="L36">    }</span>
+    
+    public void load(ResultSet resultSet) {
+        try {
+<span class="fc" id="L40">            this.setId(resultSet.getLong(&quot;ID_USER&quot;));</span>
+<span class="fc" id="L41">            this.setFullname(resultSet.getString(&quot;FULLNAME&quot;));</span>
+<span class="fc" id="L42">            this.setLogname(resultSet.getString(&quot;LOGNAME&quot;));</span>
+<span class="fc" id="L43">            this.setPassword(resultSet.getString(&quot;PASSWORD&quot;));</span>
+<span class="fc" id="L44">            this.setBalance(resultSet.getDouble(&quot;BALANCE&quot;));</span>
+<span class="nc" id="L45">        } catch (SQLException ex) {</span>
+<span class="nc" id="L46">            throw new IllegalArgumentException(&quot;Can not load selfuser entity!&quot;, ex);</span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">    }</span>
+
+<span class="fc" id="L50">    private final String preparedLogin = &quot;SELECT * FROM SELFUSER WHERE LOGNAME=? AND PASSWORD=?&quot;;</span>
+    @Override
+    public void login(String logname, String password) {
+        try {
+<span class="fc" id="L54">            PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedLogin);</span>
+<span class="fc" id="L55">            prepared.setString(1, logname);</span>
+<span class="fc" id="L56">            prepared.setString(2, password);</span>
+<span class="fc" id="L57">            ResultSet rs = prepared.executeQuery();</span>
+<span class="fc" id="L58">            rs.next();</span>
+<span class="fc" id="L59">            load(rs);</span>
+<span class="nc" id="L60">        } catch (SQLException ex) {</span>
+<span class="nc" id="L61">            throw new IllegalArgumentException(&quot;Can not login as &quot;+logname+&quot;:&quot;+password, ex);</span>
+<span class="fc" id="L62">        }</span>
+<span class="fc" id="L63">    }</span>
+
+    @Override
+    public List&lt;Bet&gt; getBets() {
+<span class="nc" id="L67">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;); //To change body of generated methods, choose Tools | Templates.</span>
+    }
+   
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

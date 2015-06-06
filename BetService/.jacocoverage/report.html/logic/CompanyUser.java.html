@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CompanyUser.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BetService&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">logic</a> &gt; <span class="el_source">CompanyUser.java</span></div><h1>CompanyUser.java</h1><pre class="source lang-java linenums">package logic;
+
+import java.util.Date;
+import java.util.List;
+import util.EntityProvider;
+
+<span class="fc" id="L7">public abstract class CompanyUser extends BasicUser{</span>
+    String companyName;
+
+    public String getCompanyName() {
+<span class="fc" id="L11">        return companyName;</span>
+    }
+
+    public void setCompanyName(String companyName) {
+<span class="fc" id="L15">        this.companyName = companyName;</span>
+<span class="fc" id="L16">    }</span>
+    
+    public abstract List&lt;Event&gt; getEvents();
+    
+    public void createEvent(String description, Date expires) {
+<span class="fc" id="L21">        Event event = EntityProvider.getBusinessFactories().getEventInstance(getDataProvider());</span>
+<span class="fc" id="L22">        event.setCompanyUser(this);</span>
+<span class="fc" id="L23">        event.setDescription(description);</span>
+<span class="fc" id="L24">        event.setExpirationTime(expires);</span>
+<span class="fc" id="L25">        event.setStatus(Event.Status.Open);</span>
+<span class="fc" id="L26">        event.save();</span>
+<span class="fc" id="L27">    }   </span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

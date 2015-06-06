@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>OutcomeDB.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BetService&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">database</a> &gt; <span class="el_source">OutcomeDB.java</span></div><h1>OutcomeDB.java</h1><pre class="source lang-java linenums">package database;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
+import logic.Bet;
+import logic.Event;
+import logic.Outcome;
+import util.MySqlUtil;
+
+<span class="fc" id="L15">public class OutcomeDB extends Outcome{</span>
+<span class="fc" id="L16">    Long eventId = null;</span>
+    
+    public void load(ResultSet resultSet) {
+        try {
+<span class="fc" id="L20">            this.setId(resultSet.getLong(&quot;ID_OUTCOME&quot;));</span>
+<span class="fc" id="L21">            this.setCurrentK(resultSet.getDouble(&quot;K&quot;));</span>
+<span class="fc" id="L22">            eventId = resultSet.getLong(&quot;ID_EVENT&quot;);</span>
+<span class="fc" id="L23">            this.setName(resultSet.getString(&quot;NAME&quot;));</span>
+<span class="nc" id="L24">        } catch (SQLException ex) {</span>
+<span class="nc" id="L25">            throw new IllegalArgumentException(&quot;Can not Outcome entity!&quot;, ex);</span>
+<span class="fc" id="L26">        } </span>
+<span class="fc" id="L27">    }</span>
+
+<span class="fc" id="L29">    private final String preparedSave = &quot;INSERT INTO OUTCOME (NAME, K, ID_EVENT)&quot; +</span>
+            &quot;VALUES (?, ?, ?)&quot; +
+            &quot;ON DUPLICATE KEY UPDATE NAME=?, K=?, ID_EVENT=?&quot;;
+    @Override
+    public void save() {
+        try {
+<span class="fc" id="L35">            PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedSave, Statement.RETURN_GENERATED_KEYS);</span>
+<span class="fc" id="L36">            prepared.setString(1, getName());</span>
+<span class="fc" id="L37">            prepared.setDouble(2, getCurrentK());</span>
+<span class="fc" id="L38">            prepared.setLong(3, eventId);</span>
+<span class="fc" id="L39">            prepared.setString(4, getName());</span>
+<span class="fc" id="L40">            prepared.setDouble(5, getCurrentK());</span>
+<span class="fc" id="L41">            prepared.setLong(6, eventId);</span>
+<span class="fc" id="L42">            prepared.execute();</span>
+<span class="fc" id="L43">            ResultSet rs = prepared.getGeneratedKeys();</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">            if (rs.next())</span>
+<span class="fc" id="L45">                setId(rs.getLong(1));</span>
+<span class="nc" id="L46">        } catch (SQLException ex) {</span>
+<span class="nc" id="L47">            throw new IllegalStateException(&quot;Can not save outcome entity!&quot;, ex);</span>
+<span class="fc" id="L48">        }</span>
+<span class="fc" id="L49">    }</span>
+
+<span class="fc" id="L51">    private final String preparedBets = &quot;SELECT * FROM BET WHERE ID_OUTCOME=?&quot;;</span>
+    @Override
+    public List&lt;Bet&gt; getAllBets() {
+        try {
+<span class="fc" id="L55">            List&lt;Bet&gt; outcomes = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L56">            PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedBets);</span>
+<span class="fc" id="L57">            prepared.setLong(1, getId());</span>
+<span class="fc" id="L58">            ResultSet rs = prepared.executeQuery();</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">            while (rs.next()) {</span>
+<span class="fc" id="L60">                BetDB bet = new BetDB();</span>
+<span class="fc" id="L61">                bet.setDataProvider(getDataProvider());</span>
+<span class="fc" id="L62">                bet.load(rs);</span>
+<span class="fc" id="L63">                outcomes.add(bet);</span>
+<span class="fc" id="L64">            }</span>
+<span class="fc" id="L65">            return outcomes;</span>
+<span class="nc" id="L66">        } catch (SQLException ex) {</span>
+<span class="nc" id="L67">            throw new IllegalStateException(&quot;Can not load events!&quot;, ex);</span>
+        }
+    }
+
+    
+    @Override
+    public Event getEvent() {
+<span class="fc" id="L74">        return EventDB.getEvent(MySqlUtil.extractConnection(this), eventId);</span>
+    }
+
+    @Override
+    public void setEvent(Event event) {
+<span class="fc" id="L79">        eventId = event.getId();</span>
+<span class="fc" id="L80">    }</span>
+    
+    private static final String preparedOutcome = &quot;SELECT * FROM OUTCOME WHERE ID_OUTCOME=?&quot;;
+    public static Outcome getOutcome(Connection connection, Long id) {
+        try {
+<span class="nc" id="L85">            OutcomeDB outcome = new OutcomeDB();</span>
+<span class="nc" id="L86">            outcome.setDataProvider(connection);</span>
+<span class="nc" id="L87">            PreparedStatement prepared = connection.prepareCall(preparedOutcome);</span>
+<span class="nc" id="L88">            prepared.setLong(1, id);</span>
+<span class="nc" id="L89">            ResultSet rs = prepared.executeQuery();</span>
+<span class="nc" id="L90">            rs.next();</span>
+<span class="nc" id="L91">            outcome.load(rs);</span>
+<span class="nc" id="L92">            return outcome;</span>
+<span class="nc" id="L93">        } catch (SQLException ex) {</span>
+<span class="nc" id="L94">            throw new IllegalStateException(&quot;Can not load outcome entity!&quot;, ex);</span>
+        }
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

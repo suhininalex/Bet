@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BetDB.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BetService&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">database</a> &gt; <span class="el_source">BetDB.java</span></div><h1>BetDB.java</h1><pre class="source lang-java linenums">package database;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.text.html.parser.Entity;
+import logic.Bet;
+import logic.Outcome;
+import logic.SelfUser;
+import util.EntityProvider;
+import util.MySqlUtil;
+
+<span class="fc" id="L16">public class BetDB extends Bet{</span>
+           
+    long userId;
+    long outcomeId;
+
+<span class="fc" id="L21">    private final String preparedUser = &quot;SELECT * FROM SELFUSER WHERE ID_USER=?&quot;;</span>
+    @Override
+    public SelfUser getUser() {
+        try {
+<span class="fc" id="L25">            SelfUserDB selfUser = new SelfUserDB();</span>
+<span class="fc" id="L26">            selfUser.setDataProvider(getDataProvider());</span>
+<span class="fc" id="L27">            PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareCall(preparedUser);</span>
+<span class="fc" id="L28">            prepared.setLong(1, userId);</span>
+<span class="fc" id="L29">            ResultSet rs = prepared.executeQuery();</span>
+<span class="fc" id="L30">            rs.next();</span>
+<span class="fc" id="L31">            selfUser.load(rs);</span>
+<span class="fc" id="L32">            return selfUser;</span>
+<span class="nc" id="L33">        } catch (SQLException ex) {</span>
+<span class="nc" id="L34">            throw new IllegalStateException(&quot;Can not load selfuser entity!&quot;, ex);</span>
+        }
+    }
+
+    @Override
+    public void setUser(SelfUser user) {
+<span class="fc" id="L40">        userId = user.getId();</span>
+<span class="fc" id="L41">    }</span>
+
+    @Override
+    public Outcome getOutcome() {
+<span class="nc" id="L45">        return OutcomeDB.getOutcome(MySqlUtil.extractConnection(this), outcomeId);</span>
+    }
+
+    @Override
+    public void setOutcome(Outcome outcome) {
+<span class="fc" id="L50">        outcomeId = outcome.getId();</span>
+<span class="fc" id="L51">    }</span>
+
+<span class="fc" id="L53">    private final String preparedSave = &quot;INSERT INTO BET (AMOUNT, STATUS, K, USER, ID_OUTCOME)&quot; +</span>
+            &quot;VALUES (?, ?, ?, ?, ?)&quot; +
+            &quot;ON DUPLICATE KEY UPDATE AMOUNT=?, STATUS=?, K=?, USER=?, ID_OUTCOME=?&quot;;
+    @Override
+    public void save() {
+        try {
+<span class="fc" id="L59">            PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedSave, Statement.RETURN_GENERATED_KEYS);</span>
+<span class="fc" id="L60">            prepared.setDouble(1, getAmount());</span>
+<span class="fc" id="L61">            prepared.setInt(2, getStatus().getCode());</span>
+<span class="fc" id="L62">            prepared.setDouble(3, getK());</span>
+<span class="fc" id="L63">            prepared.setLong(4, userId);</span>
+<span class="fc" id="L64">            prepared.setLong(5, outcomeId);</span>
+<span class="fc" id="L65">            prepared.setDouble(6, getAmount());</span>
+<span class="fc" id="L66">            prepared.setInt(7, getStatus().getCode());</span>
+<span class="fc" id="L67">            prepared.setDouble(8, getK());</span>
+<span class="fc" id="L68">            prepared.setLong(9, userId);</span>
+<span class="fc" id="L69">            prepared.setLong(10, outcomeId);</span>
+<span class="fc" id="L70">            prepared.execute();</span>
+<span class="fc" id="L71">            ResultSet rs = prepared.getGeneratedKeys();</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">            if (rs.next())</span>
+<span class="fc" id="L73">                setId(rs.getLong(1));</span>
+<span class="nc" id="L74">        } catch (SQLException ex) {</span>
+<span class="nc" id="L75">            throw new IllegalStateException(&quot;Can not save bet entity!&quot;, ex);</span>
+<span class="fc" id="L76">        }</span>
+<span class="fc" id="L77">    }</span>
+
+    public void load(ResultSet resultSet) {
+        try {
+<span class="fc" id="L81">            this.setId(resultSet.getLong(&quot;ID_BET&quot;));</span>
+<span class="fc" id="L82">            this.setK(resultSet.getDouble(&quot;K&quot;));</span>
+<span class="fc" id="L83">            outcomeId = resultSet.getLong(&quot;ID_OUTCOME&quot;);</span>
+<span class="fc" id="L84">            userId =resultSet.getLong(&quot;USER&quot;);</span>
+<span class="fc" id="L85">            this.setStatus(Bet.Status.getFromCode(resultSet.getInt(&quot;STATUS&quot;)));</span>
+<span class="nc" id="L86">        } catch (SQLException ex) {</span>
+<span class="nc" id="L87">            throw new IllegalArgumentException(&quot;Can not load bet entity!&quot;, ex);</span>
+<span class="fc" id="L88">        }</span>
+<span class="fc" id="L89">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

@@ -61,7 +61,6 @@ public abstract class Outcome extends WithDataProvider implements Storable{
     }
         
     public boolean equals(Outcome outcome){
-        System.out.println(outcome.getId());
         return this.getId()==outcome.getId();
     };
     
