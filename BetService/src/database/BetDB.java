@@ -4,13 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.text.html.parser.Entity;
 import logic.Bet;
 import logic.Outcome;
 import logic.SelfUser;
-import util.EntityProvider;
 import util.MySqlUtil;
 
 public class BetDB extends Bet{
@@ -82,6 +78,7 @@ public class BetDB extends Bet{
             this.setK(resultSet.getDouble("K"));
             outcomeId = resultSet.getLong("ID_OUTCOME");
             userId =resultSet.getLong("USER");
+            this.setAmount(resultSet.getDouble("amount"));
             this.setStatus(Bet.Status.getFromCode(resultSet.getInt("STATUS")));
         } catch (SQLException ex) {
             throw new IllegalArgumentException("Can not load bet entity!", ex);

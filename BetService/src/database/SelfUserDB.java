@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.List;
 import logic.Bet;
 import logic.SelfUser;
@@ -62,9 +63,24 @@ public class SelfUserDB extends SelfUser{
         }
     }
 
+    private final String preparedBets = "SELECT * FROM BET WHERE USER=?";
     @Override
     public List<Bet> getBets() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            List<Bet> bets = new LinkedList<>();
+            PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedBets);
+            prepared.setLong(1, getId());
+            ResultSet rs = prepared.executeQuery();
+            while (rs.next()) {
+                BetDB bet = new BetDB();
+                bet.setDataProvider(getDataProvider());
+                bet.load(rs);
+                bets.add(bet);
+            }
+            return bets;
+        } catch (SQLException ex) {
+            throw new IllegalStateException("Can not load events!", ex);
+        }
     }
    
 }

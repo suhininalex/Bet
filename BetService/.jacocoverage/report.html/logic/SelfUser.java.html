@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SelfUser.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BetService&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">logic</a> &gt; <span class="el_source">SelfUser.java</span></div><h1>SelfUser.java</h1><pre class="source lang-java linenums">package logic;
 
+import entity.SelfUserPojo;
 import java.util.List;
-import util.EntityProvider;
+import util.Storable;
 
-<span class="fc" id="L6">public abstract class SelfUser extends BasicUser{</span>
-    String fullname;
-
-    public String getFullname() {
-<span class="fc" id="L10">        return fullname;</span>
-    }
-
-    public void setFullname(String fullname) {
-<span class="fc" id="L14">        this.fullname = fullname;</span>
-<span class="fc" id="L15">    }</span>
+<span class="fc" id="L7">public abstract class SelfUser extends SelfUserPojo implements Storable{</span>
     
     public void createBet(Outcome outcome, double amount){
-<span class="pc bpc" id="L18" title="1 of 2 branches missed.">        if (System.currentTimeMillis()&gt;outcome.getEvent().getExpirationTime().getTime())</span>
-<span class="nc" id="L19">            throw new IllegalStateException(&quot;Event id expired already&quot;);</span>
-<span class="fc" id="L20">        Bet bet = EntityProvider.getBusinessFactories().getBetInstance(getDataProvider());</span>
-<span class="fc" id="L21">        this.withdraw(amount);</span>
-<span class="fc" id="L22">        bet.setUser(this);</span>
-<span class="fc" id="L23">        bet.setOutcome(outcome);</span>
-<span class="fc" id="L24">        bet.amount = amount;</span>
-<span class="fc" id="L25">        bet.K = outcome.getCurrentK();</span>
-<span class="fc" id="L26">        bet.setStatus(Bet.Status.Open);</span>
-<span class="fc" id="L27">        bet.save();</span>
-<span class="fc" id="L28">    }</span>
+<span class="pc bpc" id="L10" title="1 of 2 branches missed.">        if (System.currentTimeMillis()&gt;outcome.getEvent().getExpirationTime().getTime())</span>
+<span class="nc" id="L11">            throw new IllegalStateException(&quot;Event id expired already&quot;);</span>
+<span class="fc" id="L12">        Bet bet = EntityProvider.getBusinessFactories().getBetInstance(getDataProvider());</span>
+<span class="fc" id="L13">        this.withdraw(amount);</span>
+<span class="fc" id="L14">        bet.setUser(this);</span>
+<span class="fc" id="L15">        bet.setOutcome(outcome);</span>
+<span class="fc" id="L16">        bet.amount = amount;</span>
+<span class="fc" id="L17">        bet.K = outcome.getCurrentK();</span>
+<span class="fc" id="L18">        bet.setStatus(Bet.Status.Open);</span>
+<span class="fc" id="L19">        bet.save();</span>
+<span class="fc" id="L20">    }</span>
       
     public abstract List&lt;Bet&gt; getBets();
+    
+    public void withdraw(double amount){
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">        if (getBalance()&lt;amount) throw new IllegalArgumentException(&quot;Not enought money!&quot;);</span>
+<span class="fc" id="L26">        setBalance(getBalance()-amount);</span>
+<span class="fc" id="L27">        save();</span>
+<span class="fc" id="L28">    }</span>
+    
+    public void deposit(double amount){
+<span class="fc" id="L31">        setBalance(getBalance()+amount);</span>
+<span class="fc" id="L32">        save();</span>
+<span class="fc" id="L33">    }</span>
+    
+    public abstract void login(String logname, String password);
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

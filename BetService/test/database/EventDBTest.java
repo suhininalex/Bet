@@ -54,10 +54,9 @@ public class EventDBTest {
         SelfUser selfUser = EntityProvider.getBusinessFactories().getSelfUserInstance(MySqlUtil.extractConnection(event));
         selfUser.login("llama", "11235813");
         selfUser.createBet(outcome, 100.0);
+        System.out.println("Total bets: " + selfUser.getBets().size());
         System.out.println(outcome.getAllBets().get(0).getUser().getFullname());
         
         event.setWinner(outcome);
     }
-    
-    
 }

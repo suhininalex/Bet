@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Payments.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BetService&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">logic</a> &gt; <span class="el_source">Payments.java</span></div><h1>Payments.java</h1><pre class="source lang-java linenums">package logic;
 
+import entity.WithDataProvider;
 import util.Storable;
 
-<span class="fc" id="L5">public abstract class Payments extends WithDataProvider implements Storable{</span>
+<span class="fc" id="L6">public abstract class Payments extends WithDataProvider implements Storable{</span>
     
     Status status;
-<span class="fc" id="L8">    Long id = null;</span>
+<span class="fc" id="L9">    Long id = null;</span>
 
     public Long getId() {
-<span class="nc" id="L11">        return id;</span>
+<span class="nc" id="L12">        return id;</span>
     }
 
     public void setId(Long id) {
-<span class="fc" id="L15">        this.id = id;</span>
-<span class="fc" id="L16">    }</span>
+<span class="fc" id="L16">        this.id = id;</span>
+<span class="fc" id="L17">    }</span>
 
     public Status getStatus() {
-<span class="fc" id="L19">        return status;</span>
+<span class="fc" id="L20">        return status;</span>
     }
 
     public void setStatus(Status status) {
-<span class="fc" id="L23">        this.status = status;</span>
-<span class="fc" id="L24">    }</span>
+<span class="fc" id="L24">        this.status = status;</span>
+<span class="fc" id="L25">    }</span>
     
     protected abstract void setEvent(Event event);
     
@@ -32,38 +33,38 @@ import util.Storable;
     protected abstract Outcome getWinnerOutcome();
     
     public void payAll(){
-<span class="fc" id="L35">        Outcome winner = getWinnerOutcome();</span>
-<span class="fc" id="L36">        winner.payAll(true);</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">        for (Outcome outcome : getEvent().getOutcomes()){</span>
-<span class="pc bpc" id="L38" title="1 of 2 branches missed.">            if (!winner.equals(outcome)) {</span>
-<span class="nc" id="L39">                outcome.payAll(false);</span>
-<span class="nc" id="L40">                System.out.println(&quot;not winner&quot;);</span>
+<span class="fc" id="L36">        Outcome winner = getWinnerOutcome();</span>
+<span class="fc" id="L37">        winner.payAll(true);</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        for (Outcome outcome : getEvent().getOutcomes()){</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">            if (!winner.equals(outcome)) {</span>
+<span class="nc" id="L40">                outcome.payAll(false);</span>
+<span class="nc" id="L41">                System.out.println(&quot;not winner&quot;);</span>
             }
-<span class="fc" id="L42">        }</span>
-<span class="fc" id="L43">        status = Status.Paid;</span>
-<span class="fc" id="L44">        save();</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L43">        }</span>
+<span class="fc" id="L44">        status = Status.Paid;</span>
+<span class="fc" id="L45">        save();</span>
+<span class="fc" id="L46">    }</span>
        
-<span class="pc" id="L47">        public static enum Status {</span>
-<span class="fc" id="L48">        Waiting (0), </span>
-<span class="fc" id="L49">        Paid (1);</span>
+<span class="pc" id="L48">        public static enum Status {</span>
+<span class="fc" id="L49">        Waiting (0), </span>
+<span class="fc" id="L50">        Paid (1);</span>
         
         private final int code;
 
-<span class="fc" id="L53">        Status(int code) {</span>
-<span class="fc" id="L54">            this.code = code;</span>
-<span class="fc" id="L55">        }</span>
+<span class="fc" id="L54">        Status(int code) {</span>
+<span class="fc" id="L55">            this.code = code;</span>
+<span class="fc" id="L56">        }</span>
         
         public static Status getFromCode(int code){
-<span class="nc bnc" id="L58" title="All 3 branches missed.">            switch (code) {</span>
-<span class="nc" id="L59">                case 0: return Waiting;</span>
-<span class="nc" id="L60">                case 1: return Paid;</span>
-<span class="nc" id="L61">                default: throw new IllegalArgumentException(&quot;Accepted codes are 0-2&quot;);</span>
+<span class="nc bnc" id="L59" title="All 3 branches missed.">            switch (code) {</span>
+<span class="nc" id="L60">                case 0: return Waiting;</span>
+<span class="nc" id="L61">                case 1: return Paid;</span>
+<span class="nc" id="L62">                default: throw new IllegalArgumentException(&quot;Accepted codes are 0-2&quot;);</span>
             }
         }
 
         public int getCode() {
-<span class="fc" id="L66">            return code;</span>
+<span class="fc" id="L67">            return code;</span>
         }
     }
 }

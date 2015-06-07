@@ -81,5 +81,5 @@ public class CompanyUserDB extends CompanyUser {
         } catch (SQLException ex) {
             throw new IllegalStateException("Can not load events!", ex);
         }
-    }
+    }    
 }

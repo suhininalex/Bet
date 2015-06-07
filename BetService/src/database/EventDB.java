@@ -23,8 +23,11 @@ public class EventDB extends Event {
         try {
             PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedFind);
             prepared.setLong(1, idCompany);
+            ResultSet rs = prepared.executeQuery();
+            rs.next();
             CompanyUserDB companyUser = new CompanyUserDB();
-            companyUser.load(prepared.executeQuery());
+            companyUser.setDataProvider(this);
+            companyUser.load(rs);
             return companyUser;
         } catch (SQLException ex) {
             throw new IllegalStateException("Can not load user from event!", ex);
@@ -105,6 +108,25 @@ public class EventDB extends Event {
             return event;
         } catch (SQLException ex) {
             throw new IllegalStateException("Can not load event entity!", ex);
+        }
+    }
+    
+    public static final String preparedOpenEvents = "SELECT * FROM EVENT WHERE EXPIRATIONTIME>CURRENT_TIMESTAMP AND STATUS="+Event.Status.Open.getCode();
+    public static List<Event> getAllOpenEvents(Connection connection){
+        try {
+            List<Event> events = new LinkedList<>();
+            PreparedStatement prepared = connection.prepareStatement(preparedOpenEvents);
+            
+            ResultSet rs = prepared.executeQuery();
+            while (rs.next()) {
+                EventDB event = new EventDB();
+                event.setDataProvider(connection);
+                event.load(rs);
+                events.add(event);
+            }
+            return events;
+        } catch (SQLException ex) {
+            throw new IllegalStateException("Can not load events!", ex);
         }
     }
 }
