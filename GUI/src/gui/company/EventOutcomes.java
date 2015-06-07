@@ -1,39 +1,33 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package gui.user;
+package gui.company;
 
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import service.Session;
 import util.RemoteProvider;
 import util.Utils;
 
-/**
- *
- * @author llama
- */
-public class OpenEvents extends javax.swing.JFrame {
+public class EventOutcomes extends javax.swing.JFrame {
 
     private final Session session;
-    private final List<Map<String,Object>> events;
+    private final long id;
+    private final List<Map<String,Object>> outcomes;
+    private final CompanyEvents companyEventsFrame;
     
     private DefaultTableModel tableModel = 
             new javax.swing.table.DefaultTableModel(
                 new Object [][] {},
-                new String [] {"Id", "Description", "Company", "Expires"}
+                new String [] {"Id", "Name", "K", "Risk"}
             ) 
             {
                 Class[] types = new Class [] {
-                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
                 
                 boolean[] canEdit = new boolean [] {
-                    false, false, false, false, false
+                    false, false, false, false
                 };
 
                 public Class getColumnClass(int columnIndex) {
@@ -45,15 +39,14 @@ public class OpenEvents extends javax.swing.JFrame {
                 }
             };
     
-    /**
-     * Creates new form UserBets
-     */
-    public OpenEvents(Session session) {
+    public EventOutcomes(Session session, long id, CompanyEvents companyEventsFrame) {
         initComponents();
         this.session = session;
         Utils.centerFrame(this);
+        this.id = id;
+        this.companyEventsFrame = companyEventsFrame;
         try {
-            events = RemoteProvider.getUserService().getOpenEvents();
+            outcomes = RemoteProvider.getCompanyService().getEventInfo(session, id);
             update();
         } catch (RemoteException ex) {
             throw new IllegalStateException("Can not update event list!",ex);
@@ -61,12 +54,12 @@ public class OpenEvents extends javax.swing.JFrame {
     }
 
     public void update(){
-            for (Map<String, Object> buf : events) {
+            for (Map<String, Object> buf : outcomes) {
                 Object [] row = {
                     buf.get("id"),
-                    buf.get("description"),
-                    buf.get("company"),
-                    buf.get("expires"),
+                    buf.get("name"),
+                    buf.get("k"),
+                    buf.get("risk"),
                 };
                 tableModel.addRow(row);
             }
@@ -84,7 +77,7 @@ public class OpenEvents extends javax.swing.JFrame {
         resultTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("All open events!");
+        setTitle("Event outcomes");
 
         resultTable.setModel(tableModel);
         resultTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -110,8 +103,16 @@ public class OpenEvents extends javax.swing.JFrame {
 
     private void resultTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resultTableMouseClicked
         if (evt.getClickCount()<2) return;
-        MakeBet makeBetFrame = new MakeBet(session, (List) events.get(resultTable.getSelectedRow()).get("outcomes"));
-        makeBetFrame.setVisible(true);
+        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this, "Do you wish to make this outcome winner?","Set winner!", JOptionPane.YES_NO_OPTION)){
+            try {
+                long id = (long)outcomes.get(resultTable.getSelectedRow()).get("id");
+                RemoteProvider.getCompanyService().setWinner(session, id);
+            } catch (RemoteException ex) {
+                JOptionPane.showMessageDialog(this, "Can not set winner outcome!\n"+ex.getMessage());
+            }
+            companyEventsFrame.update();
+            this.dispose();
+        }
     }//GEN-LAST:event_resultTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

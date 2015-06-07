@@ -1,4 +1,4 @@
-package gui.User;
+package gui.user;
 
 import java.rmi.RemoteException;
 import java.util.Map;
@@ -49,7 +49,7 @@ public class UserProfile extends javax.swing.JFrame {
         deposit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Companies");
+        setTitle("Profile");
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N

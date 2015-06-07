@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package gui.user;
+package gui.company;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -17,23 +12,23 @@ import util.Utils;
  *
  * @author llama
  */
-public class OpenEvents extends javax.swing.JFrame {
+public class CompanyEvents extends javax.swing.JFrame {
 
     private final Session session;
-    private final List<Map<String,Object>> events;
+    private List<Map<String,Object>> events;
     
     private DefaultTableModel tableModel = 
             new javax.swing.table.DefaultTableModel(
                 new Object [][] {},
-                new String [] {"Id", "Description", "Company", "Expires"}
+                new String [] {"Id", "Description", "Expires", "STATUS"}
             ) 
             {
                 Class[] types = new Class [] {
-                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
                 
                 boolean[] canEdit = new boolean [] {
-                    false, false, false, false, false
+                    false, false, false, false
                 };
 
                 public Class getColumnClass(int columnIndex) {
@@ -45,31 +40,29 @@ public class OpenEvents extends javax.swing.JFrame {
                 }
             };
     
-    /**
-     * Creates new form UserBets
-     */
-    public OpenEvents(Session session) {
+    public CompanyEvents(Session session) {
         initComponents();
         this.session = session;
         Utils.centerFrame(this);
-        try {
-            events = RemoteProvider.getUserService().getOpenEvents();
-            update();
-        } catch (RemoteException ex) {
-            throw new IllegalStateException("Can not update event list!",ex);
-        }
+        update();
     }
 
     public void update(){
+        try {
+            events = RemoteProvider.getCompanyService().getOpenEvents(session);
+            while (tableModel.getRowCount()>0) tableModel.removeRow(0);
             for (Map<String, Object> buf : events) {
                 Object [] row = {
                     buf.get("id"),
                     buf.get("description"),
-                    buf.get("company"),
                     buf.get("expires"),
+                    buf.get("status"),
                 };
                 tableModel.addRow(row);
             }
+        } catch (RemoteException ex) {
+            throw new IllegalStateException("Can not update event list!",ex);
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -84,7 +77,7 @@ public class OpenEvents extends javax.swing.JFrame {
         resultTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("All open events!");
+        setTitle("Company events");
 
         resultTable.setModel(tableModel);
         resultTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -110,8 +103,9 @@ public class OpenEvents extends javax.swing.JFrame {
 
     private void resultTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resultTableMouseClicked
         if (evt.getClickCount()<2) return;
-        MakeBet makeBetFrame = new MakeBet(session, (List) events.get(resultTable.getSelectedRow()).get("outcomes"));
-        makeBetFrame.setVisible(true);
+        long id = (long)events.get(resultTable.getSelectedRow()).get("id");
+        EventOutcomes eventOutcomesFrame = new EventOutcomes(session,id,this);
+        eventOutcomesFrame.setVisible(true);
     }//GEN-LAST:event_resultTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

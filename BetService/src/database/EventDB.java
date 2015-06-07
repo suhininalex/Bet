@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.LinkedList;
 import java.util.List;
 import logic.CompanyUser;
@@ -59,21 +60,23 @@ public class EventDB extends Event {
         }
     }
 
-    private final String preparedSave = "INSERT INTO EVENT (DESCRIPTION, EXPIRATIONTIME, STATUS, ID_COMPANY)" +
-            "VALUES (?, ?, ?, ?)" +
+    private final String preparedSave = "INSERT INTO EVENT (ID_EVENT,DESCRIPTION, EXPIRATIONTIME, STATUS, ID_COMPANY)" +
+            "VALUES (?, ?, ?, ?, ?)" +
             "ON DUPLICATE KEY UPDATE DESCRIPTION=?, EXPIRATIONTIME=?, STATUS=?, ID_COMPANY=?";
     @Override
     public void save() {
         try {
             PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedSave, Statement.RETURN_GENERATED_KEYS);
-            prepared.setString(1, getDescription());
-            prepared.setTimestamp(2, new Timestamp(getExpirationTime().getTime()));
-            prepared.setInt(3, getStatus().getCode());
-            prepared.setLong(4, idCompany);
-            prepared.setString(5, getDescription());
-            prepared.setTimestamp(6, new Timestamp(getExpirationTime().getTime()));
-            prepared.setInt(7, getStatus().getCode());
-            prepared.setLong(8, idCompany);
+            if (getId()!=null) prepared.setLong(1, getId());
+            else prepared.setNull(1, Types.INTEGER);
+            prepared.setString(2, getDescription());
+            prepared.setTimestamp(3, new Timestamp(getExpirationTime().getTime()));
+            prepared.setInt(4, getStatus().getCode());
+            prepared.setLong(5, idCompany);
+            prepared.setString(6, getDescription());
+            prepared.setTimestamp(7, new Timestamp(getExpirationTime().getTime()));
+            prepared.setInt(8, getStatus().getCode());
+            prepared.setLong(9, idCompany);
             prepared.execute();
             ResultSet rs = prepared.getGeneratedKeys();
             if (rs.next())

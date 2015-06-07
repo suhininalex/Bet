@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.LinkedList;
 import java.util.List;
 import logic.Bet;
@@ -26,19 +27,21 @@ public class OutcomeDB extends Outcome{
         } 
     }
 
-    private final String preparedSave = "INSERT INTO OUTCOME (NAME, K, ID_EVENT)" +
-            "VALUES (?, ?, ?)" +
+    private final String preparedSave = "INSERT INTO OUTCOME (ID_OUTCOME, NAME, K, ID_EVENT)" +
+            "VALUES (?, ?, ?, ?)" +
             "ON DUPLICATE KEY UPDATE NAME=?, K=?, ID_EVENT=?";
     @Override
     public void save() {
         try {
             PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedSave, Statement.RETURN_GENERATED_KEYS);
-            prepared.setString(1, getName());
-            prepared.setDouble(2, getCurrentK());
-            prepared.setLong(3, eventId);
-            prepared.setString(4, getName());
-            prepared.setDouble(5, getCurrentK());
-            prepared.setLong(6, eventId);
+            if (getId()!=null) prepared.setLong(1, getId());
+            else prepared.setNull(1, Types.INTEGER);
+            prepared.setString(2, getName());
+            prepared.setDouble(3, getCurrentK());
+            prepared.setLong(4, eventId);
+            prepared.setString(5, getName());
+            prepared.setDouble(6, getCurrentK());
+            prepared.setLong(7, eventId);
             prepared.execute();
             ResultSet rs = prepared.getGeneratedKeys();
             if (rs.next())

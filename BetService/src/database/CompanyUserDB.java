@@ -63,9 +63,9 @@ public class CompanyUserDB extends CompanyUser {
         }
     }
 
-    private final String preparedEvents = "SELECT * FROM EVENT WHERE ID_COMPANY=?";
+    private final String preparedEvents = "SELECT * FROM EVENT WHERE EXPIRATIONTIME>CURRENT_TIMESTAMP AND ID_COMPANY=? AND STATUS="+Event.Status.Open.getCode();
     @Override
-    public List<Event> getEvents() {
+    public List<Event> getOpenEvents() {
         try {
             List<Event> events = new LinkedList<>();
             PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedEvents);

@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import logic.Bet;
 import logic.Outcome;
 import logic.SelfUser;
@@ -46,23 +47,25 @@ public class BetDB extends Bet{
         outcomeId = outcome.getId();
     }
 
-    private final String preparedSave = "INSERT INTO BET (AMOUNT, STATUS, K, USER, ID_OUTCOME)" +
-            "VALUES (?, ?, ?, ?, ?)" +
+    private final String preparedSave = "INSERT INTO BET (ID_BET, AMOUNT, STATUS, K, USER, ID_OUTCOME)" +
+            "VALUES (?, ?, ?, ?, ?, ?)" +
             "ON DUPLICATE KEY UPDATE AMOUNT=?, STATUS=?, K=?, USER=?, ID_OUTCOME=?";
     @Override
     public void save() {
         try {
             PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedSave, Statement.RETURN_GENERATED_KEYS);
-            prepared.setDouble(1, getAmount());
-            prepared.setInt(2, getStatus().getCode());
-            prepared.setDouble(3, getK());
-            prepared.setLong(4, userId);
-            prepared.setLong(5, outcomeId);
-            prepared.setDouble(6, getAmount());
-            prepared.setInt(7, getStatus().getCode());
-            prepared.setDouble(8, getK());
-            prepared.setLong(9, userId);
-            prepared.setLong(10, outcomeId);
+            if (getId()!=null) prepared.setLong(1, getId());
+            else prepared.setNull(1, Types.INTEGER);
+            prepared.setDouble(2, getAmount());
+            prepared.setInt(3, getStatus().getCode());
+            prepared.setDouble(4, getK());
+            prepared.setLong(5, userId);
+            prepared.setLong(6, outcomeId);
+            prepared.setDouble(7, getAmount());
+            prepared.setInt(8, getStatus().getCode());
+            prepared.setDouble(9, getK());
+            prepared.setLong(10, userId);
+            prepared.setLong(11, outcomeId);
             prepared.execute();
             ResultSet rs = prepared.getGeneratedKeys();
             if (rs.next())

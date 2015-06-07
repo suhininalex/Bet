@@ -45,11 +45,11 @@ public class EventDBTest {
         CompanyUser user = EntityProvider.getBusinessFactories().getCompanyUserInstance(MySqlUtil.getConnection());
         user.login("llama", "11235815");
         user.createEvent("New event, best of all!", new Date(System.currentTimeMillis()+3600*1000*24*31));
-        Event event = user.getEvents().get(0);
+        Event event = user.getOpenEvents().get(0);
         event.addOutcome("Text outcome 1!", 2);
         event.addOutcome("Text outcome 2!", 0.35);
         System.out.println("Random k: "+event.getOutcomes().get(1).getCurrentK());
-        System.out.println("size of events:"+user.getEvents().size());
+        System.out.println("size of events:"+user.getOpenEvents().size());
         Outcome outcome = event.getOutcomes().get(0);
         SelfUser selfUser = EntityProvider.getBusinessFactories().getSelfUserInstance(MySqlUtil.extractConnection(event));
         selfUser.login("llama", "11235813");

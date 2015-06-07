@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.User;
+package gui.user;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -84,6 +84,7 @@ public class UserBets extends javax.swing.JFrame {
         resultTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("All bets!");
 
         resultTable.setModel(tableModel);
         jScrollPane1.setViewportView(resultTable);

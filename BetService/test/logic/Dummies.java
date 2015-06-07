@@ -72,7 +72,7 @@ public class Dummies implements BusinessFactories{
             }
 
             @Override
-            public List<Event> getEvents() {
+            public List<Event> getOpenEvents() {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         };

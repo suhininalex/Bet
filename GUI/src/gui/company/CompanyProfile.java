@@ -1,6 +1,5 @@
 package gui.company;
 
-import gui.User.*;
 import java.rmi.RemoteException;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -42,13 +41,13 @@ public class CompanyProfile extends javax.swing.JFrame {
         balance = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         idUser = new javax.swing.JTextField();
-        showOutcomes = new javax.swing.JButton();
-        showBets = new javax.swing.JButton();
+        showEvents = new javax.swing.JButton();
+        createEvent = new javax.swing.JButton();
         withdraw = new javax.swing.JButton();
         deposit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Companies");
+        setTitle("Company profile");
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -79,17 +78,17 @@ public class CompanyProfile extends javax.swing.JFrame {
         idUser.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         idUser.setAutoscrolls(false);
 
-        showOutcomes.setText("Show all outcomes!");
-        showOutcomes.addActionListener(new java.awt.event.ActionListener() {
+        showEvents.setText("Show open events!");
+        showEvents.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                showOutcomesActionPerformed(evt);
+                showEventsActionPerformed(evt);
             }
         });
 
-        showBets.setText("Show all active bets!");
-        showBets.addActionListener(new java.awt.event.ActionListener() {
+        createEvent.setText("Create Event!");
+        createEvent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                showBetsActionPerformed(evt);
+                createEventActionPerformed(evt);
             }
         });
 
@@ -114,7 +113,7 @@ public class CompanyProfile extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(showOutcomes, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(showEvents, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,7 +132,7 @@ public class CompanyProfile extends javax.swing.JFrame {
                             .addComponent(deposit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGap(18, 18, 18)
                             .addComponent(withdraw, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(showBets, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(createEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -156,9 +155,9 @@ public class CompanyProfile extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(balance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(showOutcomes)
+                .addComponent(showEvents)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(showBets)
+                .addComponent(createEvent)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(withdraw)
@@ -169,15 +168,15 @@ public class CompanyProfile extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void showBetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showBetsActionPerformed
-        UserBets betsFrame = new UserBets(session);
-        betsFrame.setVisible(true);
-    }//GEN-LAST:event_showBetsActionPerformed
+    private void createEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createEventActionPerformed
+        CreateEvent createEventFrame = new CreateEvent(session);
+        createEventFrame.setVisible(true);
+    }//GEN-LAST:event_createEventActionPerformed
 
-    private void showOutcomesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showOutcomesActionPerformed
-        OpenEvents eventsFrame = new OpenEvents(session);
-        eventsFrame.setVisible(true);
-    }//GEN-LAST:event_showOutcomesActionPerformed
+    private void showEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showEventsActionPerformed
+        CompanyEvents companyEventsFrame = new CompanyEvents(session);
+        companyEventsFrame.setVisible(true);
+    }//GEN-LAST:event_showEventsActionPerformed
 
     private void depositActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_depositActionPerformed
         try {
@@ -199,6 +198,7 @@ public class CompanyProfile extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField balance;
+    private javax.swing.JButton createEvent;
     private javax.swing.JButton deposit;
     private javax.swing.JTextField fullname;
     private javax.swing.JTextField idUser;
@@ -207,8 +207,7 @@ public class CompanyProfile extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField logname;
-    private javax.swing.JButton showBets;
-    private javax.swing.JButton showOutcomes;
+    private javax.swing.JButton showEvents;
     private javax.swing.JButton withdraw;
     // End of variables declaration//GEN-END:variables
 }

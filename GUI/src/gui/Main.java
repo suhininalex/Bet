@@ -5,7 +5,7 @@
  */
 package gui;
 
-import gui.User.UserProfile;
+import gui.user.UserProfile;
 import gui.company.CompanyProfile;
 import java.util.Map;
 import javax.swing.JOptionPane;

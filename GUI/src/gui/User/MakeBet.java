@@ -1,4 +1,4 @@
-package gui.User;
+package gui.user;
 
 import java.rmi.RemoteException;
 import java.text.NumberFormat;
@@ -46,6 +46,7 @@ public class MakeBet extends javax.swing.JFrame {
         amount = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Create bet");
         setResizable(false);
 
         createBet.setText("OK");
@@ -92,6 +93,7 @@ public class MakeBet extends javax.swing.JFrame {
             this.dispose();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Can not create bet!\n"+ex.getMessage());
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_createBetActionPerformed
 

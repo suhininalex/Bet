@@ -15,14 +15,15 @@ public abstract class CompanyUser extends BasicUser{
         this.companyName = companyName;
     }
     
-    public abstract List<Event> getEvents();
+    public abstract List<Event> getOpenEvents();
     
-    public void createEvent(String description, Date expires) {
+    public Event createEvent(String description, Date expires) {
         Event event = EntityProvider.getBusinessFactories().getEventInstance(getDataProvider());
         event.setCompanyUser(this);
         event.setDescription(description);
         event.setExpirationTime(expires);
         event.setStatus(Event.Status.Open);
         event.save();
+        return event;
     }   
 }

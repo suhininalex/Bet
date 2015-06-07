@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import logic.Event;
 import logic.Outcome;
 import logic.Payments;
@@ -34,19 +35,21 @@ public class PaymentsDB extends Payments{
         return OutcomeDB.getOutcome(MySqlUtil.extractConnection(this), idWinnerOutcome);
     }
 
-    private final String preparedSave = "INSERT INTO PAYMENT (STATUS, ID_WINNEROUTCOME, ID_EVENT)" +
-            "VALUES (?, ?, ?)" +
+    private final String preparedSave = "INSERT INTO PAYMENT (ID_PAYMENT, STATUS, ID_WINNEROUTCOME, ID_EVENT)" +
+            "VALUES (?, ?, ?, ?)" +
             "ON DUPLICATE KEY UPDATE STATUS=?, ID_WINNEROUTCOME=?, ID_EVENT=?";
     @Override
     public void save() {
         try {
             PreparedStatement prepared = MySqlUtil.extractConnection(this).prepareStatement(preparedSave, Statement.RETURN_GENERATED_KEYS);
-            prepared.setInt(1, getStatus().getCode());
-            prepared.setLong(2, idWinnerOutcome);
-            prepared.setLong(3, idEvent);
-            prepared.setInt(4, getStatus().getCode());
-            prepared.setLong(5, idWinnerOutcome);
-            prepared.setLong(6, idEvent);
+            if (getId()!=null) prepared.setLong(1, getId());
+            else prepared.setNull(1, Types.INTEGER);
+            prepared.setInt(2, getStatus().getCode());
+            prepared.setLong(3, idWinnerOutcome);
+            prepared.setLong(4, idEvent);
+            prepared.setInt(5, getStatus().getCode());
+            prepared.setLong(6, idWinnerOutcome);
+            prepared.setLong(7, idEvent);
             prepared.execute();
             ResultSet rs = prepared.getGeneratedKeys();
             if (rs.next())
