@@ -13,4 +13,6 @@ public interface BusinessFactories {
     public SelfUser getSelfUserInstance(Object dataProvider);
     
     public CompanyUser getCompanyUserInstance(Object dataProvider);
+    
+    public OwnerUser getOwnerUserInstance(Object dataProvider);
 }

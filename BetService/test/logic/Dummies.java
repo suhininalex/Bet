@@ -127,12 +127,12 @@ public class Dummies implements BusinessFactories{
             }
 
             @Override
-            protected void setWinnerOutcome(Outcome outcome) {
+            public void setWinnerOutcome(Outcome outcome) {
                 this.winner = outcome;
             }
 
             @Override
-            protected Outcome getWinnerOutcome() {
+            public Outcome getWinnerOutcome() {
                 return winner;
             }
 
@@ -168,5 +168,10 @@ public class Dummies implements BusinessFactories{
             public void save() {
             }
         };
+    }
+
+    @Override
+    public OwnerUser getOwnerUserInstance(Object dataProvider) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

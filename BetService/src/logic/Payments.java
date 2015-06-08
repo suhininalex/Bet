@@ -27,19 +27,18 @@ public abstract class Payments extends WithDataProvider implements Storable{
     
     public abstract Event getEvent();
     
-    protected abstract void setWinnerOutcome(Outcome outcome);
+    public abstract void setWinnerOutcome(Outcome outcome);
     
-    protected abstract Outcome getWinnerOutcome();
+    public abstract Outcome getWinnerOutcome();
     
     public void payAll(){
         Outcome winner = getWinnerOutcome();
-        winner.payAll(true);
         for (Outcome outcome : getEvent().getOutcomes()){
             if (!winner.equals(outcome)) {
                 outcome.payAll(false);
-                System.out.println("not winner");
             }
         }
+        winner.payAll(true);
         status = Status.Paid;
         save();
     }

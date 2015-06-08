@@ -5,10 +5,12 @@
  */
 package gui;
 
+import gui.admin.OpenPayments;
 import gui.user.UserProfile;
 import gui.company.CompanyProfile;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import service.AdminService;
 import service.CompanyService;
 import service.Session;
 import service.UserService;
@@ -48,6 +50,7 @@ public class Main extends javax.swing.JFrame {
         signup = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Authorization");
         setName("mainFrame"); // NOI18N
         setResizable(false);
 
@@ -156,6 +159,18 @@ public class Main extends javax.swing.JFrame {
                 companyProfile.setVisible(true);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Авторизация невозможна: \n" + ex.getMessage());
+            }
+        }
+        if ("Administrator".equals(usertype.getModel().getSelectedItem())) {
+            try {
+                Session session = new Session(login.getText(), password.getText());
+                RemoteProvider.getAdminService().authorize(session);
+                this.setVisible(false);
+                OpenPayments openPaymentsFrame = new OpenPayments(session);
+                openPaymentsFrame.setVisible(true);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Авторизация невозможна: \n" + ex.getMessage());
+                ex.printStackTrace();
             }
         }
     }//GEN-LAST:event_signinActionPerformed

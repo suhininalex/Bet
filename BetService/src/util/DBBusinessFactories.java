@@ -4,6 +4,7 @@ import database.BetDB;
 import database.CompanyUserDB;
 import database.EventDB;
 import database.OutcomeDB;
+import database.OwnerUserDB;
 import database.PaymentsDB;
 import database.SelfUserDB;
 import logic.Bet;
@@ -11,6 +12,7 @@ import logic.BusinessFactories;
 import logic.CompanyUser;
 import logic.Event;
 import logic.Outcome;
+import logic.OwnerUser;
 import logic.Payments;
 import logic.SelfUser;
 
@@ -56,6 +58,13 @@ public class DBBusinessFactories implements BusinessFactories{
         CompanyUser companyUser = new CompanyUserDB();
         companyUser.setDataProvider(dataProvider);
         return companyUser;
+    }
+
+    @Override
+    public OwnerUser getOwnerUserInstance(Object dataProvider) {
+        OwnerUser ownerUser = new OwnerUserDB();
+        ownerUser.setDataProvider(dataProvider);
+        return ownerUser;
     }
     
 }

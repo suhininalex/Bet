@@ -2,8 +2,6 @@ package gui.user;
 
 import java.rmi.RemoteException;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import service.Session;
 import util.RemoteProvider;

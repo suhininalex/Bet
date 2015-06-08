@@ -27,7 +27,7 @@ public class EventDB extends Event {
             ResultSet rs = prepared.executeQuery();
             rs.next();
             CompanyUserDB companyUser = new CompanyUserDB();
-            companyUser.setDataProvider(this);
+            companyUser.setDataProvider(getDataProvider());
             companyUser.load(rs);
             return companyUser;
         } catch (SQLException ex) {

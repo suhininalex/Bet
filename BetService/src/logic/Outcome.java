@@ -46,10 +46,9 @@ public abstract class Outcome extends WithDataProvider implements Storable{
                 else        amountForCompany+=bet.closeAsLooser();
             }
         }
-        CompanyUser companyUser = getEvent().getCompanyUser();
+        CompanyUser companyUser = this.getEvent().getCompanyUser();
         if (winner) companyUser.withdraw(amountForCompany);
         else        companyUser.deposit(amountForCompany);
-        companyUser.save();
     }
     
     public double riskAssesment(){

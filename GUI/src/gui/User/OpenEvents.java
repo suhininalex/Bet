@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui.user;
 
 import java.rmi.RemoteException;
@@ -13,10 +8,6 @@ import service.Session;
 import util.RemoteProvider;
 import util.Utils;
 
-/**
- *
- * @author llama
- */
 public class OpenEvents extends javax.swing.JFrame {
 
     private final Session session;

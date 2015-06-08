@@ -1,28 +1,33 @@
-package gui.user;
+package gui.admin;
 
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import service.Session;
 import util.RemoteProvider;
 import util.Utils;
 
-public class UserBets extends javax.swing.JFrame {
+public class PaymentOutcomes extends javax.swing.JFrame {
 
     private final Session session;
+    private final long id;
+    private final List<Map<String,Object>> outcomes;
+    private final OpenPayments openPayments;
+    
     private DefaultTableModel tableModel = 
             new javax.swing.table.DefaultTableModel(
                 new Object [][] {},
-                new String [] {"Id", "Amount", "K", "Event", "Outcome", "Status"}
+                new String [] {"Id", "Name", "K", "Risk"}
             ) 
             {
                 Class[] types = new Class [] {
-                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
                 
                 boolean[] canEdit = new boolean [] {
-                    false, false, false, false, false, false
+                    false, false, false, false
                 };
 
                 public Class getColumnClass(int columnIndex) {
@@ -34,33 +39,30 @@ public class UserBets extends javax.swing.JFrame {
                 }
             };
     
-    /**
-     * Creates new form UserBets
-     */
-    public UserBets(Session session) {
+    public PaymentOutcomes(Session session, long id, OpenPayments openPayments) {
         initComponents();
         this.session = session;
         Utils.centerFrame(this);
-        update();
+        this.id = id;
+        this.openPayments = openPayments;
+        try {
+            outcomes = RemoteProvider.getAdminService().getEventInfo(session, id);
+            update();
+        } catch (RemoteException ex) {
+            throw new IllegalStateException("Can not update event list!",ex);
+        }
     }
 
     public void update(){
-        try {
-            List<Map<String,Object>> bets = RemoteProvider.getUserService().getBets(session);
-            for (Map<String, Object> buf : bets) {
+            for (Map<String, Object> buf : outcomes) {
                 Object [] row = {
                     buf.get("id"),
-                    buf.get("amount"),
+                    buf.get("name"),
                     buf.get("k"),
-                    buf.get("event"),
-                    buf.get("outcome"),
-                    buf.get("status")
+                    buf.get("risk"),
                 };
                 tableModel.addRow(row);
             }
-        } catch (RemoteException ex) {
-            throw new IllegalStateException("Can not update bet list!",ex);
-        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -75,9 +77,14 @@ public class UserBets extends javax.swing.JFrame {
         resultTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("All bets!");
+        setTitle("Event outcomes");
 
         resultTable.setModel(tableModel);
+        resultTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                resultTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(resultTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -93,6 +100,18 @@ public class UserBets extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void resultTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resultTableMouseClicked
+        if (evt.getClickCount()<2) return;
+        try {
+            long id = (long)outcomes.get(resultTable.getSelectedRow()).get("id");
+            RemoteProvider.getAdminService().changeWinner(session, id);
+        } catch (RemoteException ex) {
+            JOptionPane.showMessageDialog(this, "Can not set winner outcome!\n"+ex.getMessage());
+        }
+        openPayments.update();
+        this.dispose();
+    }//GEN-LAST:event_resultTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

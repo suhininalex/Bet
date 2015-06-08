@@ -1,5 +1,6 @@
 package database;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,12 +27,12 @@ public class PaymentsDB extends Payments{
     }
 
     @Override
-    protected void setWinnerOutcome(Outcome outcome) {
+    public void setWinnerOutcome(Outcome outcome) {
         idWinnerOutcome = outcome.getId();
     }
 
     @Override
-    protected Outcome getWinnerOutcome() {
+    public Outcome getWinnerOutcome() {
         return OutcomeDB.getOutcome(MySqlUtil.extractConnection(this), idWinnerOutcome);
     }
 
@@ -68,5 +69,37 @@ public class PaymentsDB extends Payments{
         } catch (SQLException ex) {
             throw new IllegalArgumentException("Can not payment entity!", ex);
         } 
+    }
+    
+    private static final String preparedPaymentEvent = "SELECT * FROM PAYMENT WHERE ID_EVENT=?";
+    public static Payments getPaymentByEventID(Connection connection, Long eventId){
+        try {
+            PreparedStatement prepared = connection.prepareStatement(preparedPaymentEvent);
+            prepared.setLong(1, eventId);
+            ResultSet rs = prepared.executeQuery();
+            rs.next();
+            PaymentsDB payment = new PaymentsDB();
+            payment.setDataProvider(connection);
+            payment.load(rs);
+            return payment;
+        } catch (SQLException ex) {
+            throw new IllegalStateException("Can not load event entity!", ex);
+        }
+    }
+    
+    private static final String preparedPayment = "SELECT * FROM PAYMENT WHERE ID_PAYMENT=?";
+    public static Payments getPayment(Connection connection, Long id){
+        try {
+            PreparedStatement prepared = connection.prepareStatement(preparedPayment);
+            prepared.setLong(1, id);
+            ResultSet rs = prepared.executeQuery();
+            rs.next();
+            PaymentsDB payment = new PaymentsDB();
+            payment.setDataProvider(connection);
+            payment.load(rs);
+            return payment;
+        } catch (SQLException ex) {
+            throw new IllegalStateException("Can not load event entity!", ex);
+        }
     }
 }
