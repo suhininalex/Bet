@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Event information</title>     
+        <h:outputStylesheet library="css" name="styles.css" />
+    </h:head>
+    <h:body rendered="#{eventBean.eventBean!=null}">
+        <f:metadata>
+            <f:viewParam name="id" value="#{eventBean.id}" />
+        </f:metadata>
+        <h3>Event common information</h3>
+        <h:panelGrid columns="2">
+            <h:outputLabel value="Id:" />
+            <h:outputLabel value="#{eventBean.id}"/>
+            
+            <h:outputLabel value="Company:" />
+            <h:outputLabel value="#{eventBean.eventBean.idCompany.fullname}"/>
+            
+            <h:outputLabel value="Description:" />
+            <h:outputLabel value="#{eventBean.eventBean.description}"/>
+            
+            <h:outputLabel value="Expires:" />
+            <h:outputLabel value="#{eventBean.eventBean.expirationtime}"/>
+            
+            <h:outputLabel value="Status:" />
+            <h:outputLabel value="#{eventBean.eventBean.status}"/>
+        </h:panelGrid>
+
+        <h3>Event outcomes info</h3>
+        <f:view>
+            <h:form>
+                <h:dataTable value="#{eventBean.eventBean.outcomeCollection}" var="item" class="datatable">
+                    <h:column>
+                        <f:facet name="header">Outcome</f:facet>
+                        #{item.name}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Rate</f:facet>
+                        #{item.k}
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </f:view>
+    </h:body>
+</html>
+

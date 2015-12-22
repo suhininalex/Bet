@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Bet</title>
+        <h:outputStylesheet library="css" name="styles.css" />
+    </h:head>
+    <h:body>
+        <f:metadata>
+            <f:viewParam name="idOutcome" value="#{createBetBean.idOutcome}"/>
+        </f:metadata>
+        <h3>Bet confirmation</h3>
+        <h:form rendered="#{createBetBean.outcome!=null}">
+            <h:inputHidden id="idOutcome" value="#{createBetBean.idOutcome}" />
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Event description: " />
+                <h:outputLabel value="#{createBetBean.outcome.idEvent.description}" />
+                <h:panelGroup />
+
+                <h:outputLabel value="Outcome: " />
+                <h:outputLabel value="#{createBetBean.outcome.name}" />
+                <h:panelGroup />
+
+                <h:outputLabel value="Rate: " />
+                <h:outputLabel value="#{createBetBean.outcome.k}" />
+                <h:panelGroup />
+
+                <h:outputLabel value="Amount: " />
+                <h:inputText id="amount" required="true" value="#{createBetBean.amount}"  converterMessage="Please enter digits only."/>
+                <h:message for="amount" class="error_message" />
+
+                <h:commandButton value="OK" action="#{createBetBean.createBet()}" />
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+

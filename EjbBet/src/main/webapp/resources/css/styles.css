@@ -1,0 +1,33 @@
+.error_message{
+    color: red;
+    font-family: Tahoma,Arial;
+    font-size: 0.7em;
+}
+
+.datatable{
+    border-collapse: collapse;
+}
+
+.datatable td{
+    border: 1px solid black;
+}
+
+a {
+    color: blue;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
+}

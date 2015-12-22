@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>All user bets</title>
+        <h:outputStylesheet library="css" name="styles.css"/>
+    </h:head>
+    <h:body>
+        <h3>All user bets</h3>
+        <f:view>
+            <h:form>
+                <h:dataTable value="#{betBean.bets}" var="item" class="datatable">
+                    <h:column>
+                        <f:facet name="header">event</f:facet>
+                        <h:link outcome="eventinfo.xhtml">
+                            <f:param name="id" value="#{item.idOutcome.idEvent.idEvent}"/>
+                            #{item.idOutcome.idEvent.description}
+                        </h:link>
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">outcome</f:facet>
+                        #{item.idOutcome.name}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">amount</f:facet>
+                        #{item.amount}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">rate</f:facet>
+                        #{item.k}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">status</f:facet>
+                        #{item.status}
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+            <h:form>
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Only open:"/>
+                    <h:selectBooleanCheckbox value="#{betBean.filter}" id="filter" />
+                    <h:commandButton value="OK" action="#{betBean.action()}" />
+                </h:panelGrid>
+            </h:form>
+        </f:view>
+    </h:body>
+</html>
+

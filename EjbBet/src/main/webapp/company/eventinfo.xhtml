@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Event outcomes info</title>
+        <h:outputStylesheet library="css" name="styles.css" />
+    </h:head>
+    <h:body rendered="#{companyEventBean.event!=null}">
+        <f:metadata>
+            <f:viewParam name="id" value="#{companyEventBean.idEvent}" />
+        </f:metadata>
+        <h3>Event outcomes info</h3>
+        <f:view>
+            <h:form>
+                <h:dataTable value="#{companyEventBean.event.outcomeCollection}" var="item" class="datatable">
+                    <h:column>
+                        <f:facet name="header">Outcome</f:facet>
+                        #{item.name}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Rate</f:facet>
+                        #{item.k}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Risk</f:facet>
+                        #{companyEventBean.getRisk(item)}
+                    </h:column>
+                    
+                    <h:column rendered="#{companyEventBean.isOpen}">
+                        <h:commandLink action="#{companyEventBean.winner(item)}" value="Winner" />
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </f:view>
+    </h:body>
+</html>
+

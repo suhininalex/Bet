@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Payment list</title>
+        <h:outputStylesheet library="css" name="styles.css" />
+    </h:head>
+    <h:body>
+        <h3>Payment list</h3>
+        <f:view>
+            <h:form>
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Filter by status:" />
+                    <h:selectOneMenu value="#{paymentBean.filter}">
+                        <f:selectItem itemValue="None"/>
+                        <f:selectItem itemValue="Waiting"/>
+                        <f:selectItem itemValue="Paid"/>
+                    </h:selectOneMenu>
+                    <h:commandButton action="#{paymentBean.action()}" value="OK"/>
+                </h:panelGrid>
+                
+                <h:dataTable value="#{paymentBean.payments}" var="item" class="datatable">
+                    <h:column>
+                        <f:facet name="header">Company</f:facet>
+                        <h:outputText value="#{item.idEvent.idCompany.fullname}"/>
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Event</f:facet>
+                        <h:outputText value="#{item.idEvent.description}"/>
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Winner</f:facet>
+                        <h:outputText value="#{item.idWinneroutcome.name}"/>
+                    </h:column>  
+                    
+                    <h:column>
+                        <f:facet name="header">Rate</f:facet>
+                        <h:outputText value="#{item.idWinneroutcome.k}"/>
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Status</f:facet>
+                        <h:outputText value="#{item.status}"/>
+                    </h:column>
+                    
+                    <h:column rendered="#{paymentBean.isWaitingFilter}">
+                        <h:commandButton action="#{paymentBean.approve(item)}" value="yes"/>
+                    </h:column>
+                    
+                    <h:column rendered="#{paymentBean.isWaitingFilter}">
+                        <h:commandButton action="#{paymentBean.reject(item)}" value="no"/>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </f:view>
+
+    </h:body>
+</html>
+

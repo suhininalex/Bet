@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>User authorization form</title>
+        <h:outputStylesheet library="css" name="styles.css"/>
+    </h:head>
+    <h:body>
+        <h3>Company login form</h3>
+        <h:form>
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Username:"/>
+                <h:inputText value="#{companyAuthorizationBean.username}" id="username" required="true" requiredMessage="Please, fill this field."/>
+                <h:message for="username" class="error_message" />
+                
+                <h:outputLabel value="Password:"/>
+                <h:inputSecret value="#{companyAuthorizationBean.password}" id="password" required="true" requiredMessage="Please, fill this field." />
+                <h:message for="password" class="error_message" />
+                
+                <h:commandButton action="#{companyAuthorizationBean.action()}" value="OK"/>       
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+
