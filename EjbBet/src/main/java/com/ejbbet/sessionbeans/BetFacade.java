@@ -12,6 +12,9 @@ import javax.persistence.PersistenceContext;
 public class BetFacade extends AbstractFacade<Bet> {
 
     @EJB
+    private OutcomeFacade outcomeFacade;
+
+    @EJB
     private SelfuserFacade selfuserFacade;
 
     @PersistenceContext(unitName = "com.ejbbet_EjbBet_war_1.0-SNAPSHOTPU")
@@ -37,6 +40,8 @@ public class BetFacade extends AbstractFacade<Bet> {
         bet.setUser(user);
         user.getBetCollection().add(bet);
         selfuserFacade.edit(user);
+        outcome.getBetCollection().add(bet);
+        outcomeFacade.edit(outcome);
         create(bet);
         return true;
     }

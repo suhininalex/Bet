@@ -40,6 +40,7 @@ public class CompanyuserFacade extends AbstractFacade<Companyuser> {
         Query query = em.createNamedQuery("Companyuser.findByLogname");
         query.setParameter("logname", username);
         if (!query.getResultList().isEmpty()) return false;
+
         Companyuser user = new Companyuser();
         user.setBalance(0);
         user.setLogname(username);

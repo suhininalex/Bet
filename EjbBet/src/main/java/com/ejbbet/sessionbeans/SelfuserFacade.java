@@ -26,6 +26,7 @@ public class SelfuserFacade extends AbstractFacade<Selfuser> {
     public Selfuser getSelfuser(String username, String password){
         try{
             TypedQuery<Selfuser> query = em.createNamedQuery("Selfuser.findByLogname", Selfuser.class);
+            query.setParameter("logname", username);
             Selfuser selfuser = query.getSingleResult();
             if (selfuser.getPassword().equals(password)) return selfuser;
         } catch (NoResultException ex){}

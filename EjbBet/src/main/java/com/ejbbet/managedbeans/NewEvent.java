@@ -78,7 +78,7 @@ public class NewEvent {
     }
 
     public void newOutcome(){
-        outcomes.add(createOutcome("Maybe", 0.1f));
+        outcomes.add(createOutcome("Maybe", 1.1f));
     }
     
     public NewEvent() {
